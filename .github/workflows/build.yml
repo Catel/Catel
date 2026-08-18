@@ -11,33 +11,169 @@ on:
         description: Deploy the component(s)
         required: false
         type: boolean
-        default: false
+        default: true
   #pull_request:
     # Note: don't run on PR for security reasons
   
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   build:
     runs-on: windows-latest # Required for some (WPF) projects
+    env:
+      AzureCodeSignCertificateName: ''
+      AzureCodeSignClientId: ''
+      AzureCodeSignClientSecret: ''
+      AzureCodeSignTenantId: ''
+      AzureCodeSignVaultName: ''
+      CodeSignCertificateSubjectName: ''
+      NuGetUser: ''
+      SonarOrganization: ''
+      SonarUrl: ''
+      SonarToken: ''
   
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         id: checkout
         with:
           fetch-depth: 0
           
       - name: Setup .NET Core
         id: setup-dotnet
-        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           dotnet-version: '10.0.x'    
+
+      - name: Azure login (for Key Vault access)
+        id: azure-login
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2.3.1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Retrieve build-and-test secrets from Key Vault
+        id: key-vault-build-secrets
+        if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.deploy != true) }}
+        shell: pwsh
+        env:
+          AZURE_KEYVAULT_NAME: ${{ vars.AZURE_KEYVAULT_NAME || secrets.AZURE_KEYVAULT_NAME }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:AZURE_KEYVAULT_NAME)) {
+            throw "AZURE_KEYVAULT_NAME is not configured"
+          }
+
+          if ([string]::IsNullOrWhiteSpace($env:REPOSITORY_OWNER)) {
+            throw "REPOSITORY_OWNER is not available"
+          }
+
+          Write-Output "::add-mask::$env:AZURE_KEYVAULT_NAME"
+
+          $secretMap = @{
+            SonarOrganization = "$($env:REPOSITORY_OWNER)-SonarOrganization"
+            SonarUrl = "$($env:REPOSITORY_OWNER)-SonarUrl"
+            SonarToken = "$($env:REPOSITORY_OWNER)-SonarToken"
+          }
+
+          foreach ($envName in $secretMap.Keys) {
+            $vaultSecretName = $secretMap[$envName]
+            $secretValue = az keyvault secret show --only-show-errors --vault-name $env:AZURE_KEYVAULT_NAME --name $vaultSecretName --query value -o tsv
+
+            if ([string]::IsNullOrWhiteSpace($secretValue)) {
+              throw "Key Vault secret '$vaultSecretName' is empty or missing"
+            }
+
+            Write-Output "::add-mask::$secretValue"
+            Add-Content -Path $env:GITHUB_ENV -Value "$envName=$secretValue"
+          }
+
+      - name: Retrieve build-and-deploy secrets from Key Vault
+        id: key-vault-deploy-secrets
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy }}
+        shell: pwsh
+        env:
+          AZURE_KEYVAULT_NAME: ${{ vars.AZURE_KEYVAULT_NAME || secrets.AZURE_KEYVAULT_NAME }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:AZURE_KEYVAULT_NAME)) {
+            throw "AZURE_KEYVAULT_NAME is not configured"
+          }
+
+          if ([string]::IsNullOrWhiteSpace($env:REPOSITORY_OWNER)) {
+            throw "REPOSITORY_OWNER is not available"
+          }
+
+          Write-Output "::add-mask::$env:AZURE_KEYVAULT_NAME"
+
+          $secretMap = @{
+            AzureCodeSignCertificateName = "$($env:REPOSITORY_OWNER)-AzureCodeSignCertificateName"
+            AzureCodeSignTenantId = "$($env:REPOSITORY_OWNER)-AzureCodeSignTenantId"
+            AzureCodeSignClientId = "$($env:REPOSITORY_OWNER)-AzureCodeSignClientId"
+            AzureCodeSignClientSecret = "$($env:REPOSITORY_OWNER)-AzureCodeSignClientSecret"
+            CodeSignCertificateSubjectName = "$($env:REPOSITORY_OWNER)-CodeSignCertificateSubjectName"
+            NuGetUser = "$($env:REPOSITORY_OWNER)-NuGetUser"
+            SonarOrganization = "$($env:REPOSITORY_OWNER)-SonarOrganization"
+            SonarUrl = "$($env:REPOSITORY_OWNER)-SonarUrl"
+            SonarToken = "$($env:REPOSITORY_OWNER)-SonarToken"
+          }
+
+          foreach ($envName in $secretMap.Keys) {
+            $vaultSecretName = $secretMap[$envName]
+            $secretValue = az keyvault secret show --only-show-errors --vault-name $env:AZURE_KEYVAULT_NAME --name $vaultSecretName --query value -o tsv
+
+            if ([string]::IsNullOrWhiteSpace($secretValue)) {
+              throw "Key Vault secret '$vaultSecretName' is empty or missing"
+            }
+
+            Write-Output "::add-mask::$secretValue"
+            Add-Content -Path $env:GITHUB_ENV -Value "$envName=$secretValue"
+          }
+
+          Add-Content -Path $env:GITHUB_ENV -Value "AzureCodeSignVaultName=$env:AZURE_KEYVAULT_NAME"
     
-      - name: Cake Action
-        id: cake-action
+      # Get a short-lived NuGet API key
+      - name: NuGet login (OIDC → temp API key)
+        id: nuget-login
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy }}
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+        with:
+          user: ${{ env.NuGetUser }}
+    
+      # Build & test
+      - name: Build and test via Cake
+        id: cake-action-build-test
+        if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.deploy != true) }}
         uses: cake-build/cake-action@d218f1133bb74a1df0b08c89cfd8fc100c09e1a0 #v3.0.1
         with:
-          target: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy && 'BuildAndDeploy' || 'BuildAndTest' }}
+          target: 'BuildAndTest'
           arguments: |
-            IsCiBuild: ${{ github.event_name == 'push' }}
+            IsCiBuild: true
+            SonarOrganization: ${{ env.SonarOrganization }}
+            SonarUrl: ${{ env.SonarUrl }}
+            SonarProject: ${{ github.repository_owner }}-${{ github.repository }}
+            SonarToken: ${{ env.SonarToken }}
+
+      # Build & deploy
+      - name: Build and deploy via Cake
+        id: cake-action-build-deploy
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy }}
+        uses: cake-build/cake-action@d218f1133bb74a1df0b08c89cfd8fc100c09e1a0 #v3.0.1
+        with:
+          target: 'BuildAndDeploy'
+          arguments: |
+            AzureCodeSignCertificateName: ${{ env.AzureCodeSignCertificateName }}
+            AzureCodeSignClientId: ${{ env.AzureCodeSignClientId }}
+            AzureCodeSignClientSecret: ${{ env.AzureCodeSignClientSecret }}
+            AzureCodeSignTenantId: ${{ env.AzureCodeSignTenantId }}
+            AzureCodeSignVaultName: ${{ env.AzureCodeSignVaultName }}
+            CodeSignCertificateSubjectName: ${{ env.CodeSignCertificateSubjectName }}
+            IsCiBuild: false
+            SonarOrganization: ${{ env.SonarOrganization }}
+            SonarUrl: ${{ env.SonarUrl }}
+            SonarProject: ${{ github.repository_owner }}-${{ github.repository }}
+            SonarToken: ${{ env.SonarToken }}
+            NuGetRepositoryApiKey: ${{steps.nuget-login.outputs.NUGET_API_KEY}}
