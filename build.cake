@@ -24,11 +24,6 @@ Parameters["UseVisualStudioPrerelease"] = "true";
 // DEFINE COMPONENTS TO BUILD / PACKAGE
 //=======================================================
 
-// All catel libraries are  a dependency of the test references
-Dependencies.Add("Catel.Core");
-Dependencies.Add("Catel.MVVM");
-Dependencies.Add("Catel.Tests");
-
 Components.Add("Catel.Core");
 Components.Add("Catel.MVVM");
 
