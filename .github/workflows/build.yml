@@ -50,7 +50,7 @@ jobs:
       - name: Azure login (for Key Vault access)
         id: azure-login
         if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-        uses: azure/login@7184910d9eb2b1c5e48f7073824a90609bb9b6d6 # v2.3.1
+        uses: azure/login@f5d393ae46f8fde4be8b75f32e3fc50e654ad0ca # v3.0.1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
@@ -74,21 +74,43 @@ jobs:
 
           Write-Output "::add-mask::$env:AZURE_KEYVAULT_NAME"
 
-          $secretMap = @{
-            SonarOrganization = "$($env:REPOSITORY_OWNER)-SonarOrganization"
-            SonarUrl = "$($env:REPOSITORY_OWNER)-SonarUrl"
-            SonarToken = "$($env:REPOSITORY_OWNER)-SonarToken"
-          }
+          function Get-SecretValueFromCandidates {
+            param(
+              [Parameter(Mandatory = $true)]
+              [string] $VariableName
+            )
 
-          foreach ($envName in $secretMap.Keys) {
-            $vaultSecretName = $secretMap[$envName]
-            $secretValue = az keyvault secret show --only-show-errors --vault-name $env:AZURE_KEYVAULT_NAME --name $vaultSecretName --query value -o tsv
+            $candidateNames = @(
+              "$($env:REPOSITORY_OWNER)-Public-$VariableName"
+              "$($env:REPOSITORY_OWNER)-$VariableName"
+              "$VariableName"
+            )
 
-            if ([string]::IsNullOrWhiteSpace($secretValue)) {
-              throw "Key Vault secret '$vaultSecretName' is empty or missing"
+            foreach ($candidateName in $candidateNames) {
+              $secretValue = az keyvault secret show --only-show-errors --vault-name $env:AZURE_KEYVAULT_NAME --name $candidateName --query value -o tsv 2>$null
+
+              if ($LASTEXITCODE -eq 0) {
+                return [string]$secretValue
+              }
             }
 
-            Write-Output "::add-mask::$secretValue"
+            throw "Key Vault secret for '$VariableName' was not found. Tried: $($candidateNames -join ', ')"
+          }
+
+          $secretVariables = @(
+            @{ VariableName = 'SonarOrganization'; MaskValue = $false }
+            @{ VariableName = 'SonarUrl'; MaskValue = $false }
+            @{ VariableName = 'SonarToken'; MaskValue = $true }
+          )
+
+          foreach ($secretVariable in $secretVariables) {
+            $envName = $secretVariable.VariableName
+            $secretValue = Get-SecretValueFromCandidates -VariableName $envName
+
+            if ($secretVariable.MaskValue -and -not [string]::IsNullOrEmpty($secretValue)) {
+              Write-Output "::add-mask::$secretValue"
+            }
+
             Add-Content -Path $env:GITHUB_ENV -Value "$envName=$secretValue"
           }
 
@@ -110,28 +132,50 @@ jobs:
 
           Write-Output "::add-mask::$env:AZURE_KEYVAULT_NAME"
 
-          $secretMap = @{
-            AzureCodeSignCertificateName = "$($env:REPOSITORY_OWNER)-AzureCodeSignCertificateName"
-            AzureCodeSignTenantId = "$($env:REPOSITORY_OWNER)-AzureCodeSignTenantId"
-            AzureCodeSignClientId = "$($env:REPOSITORY_OWNER)-AzureCodeSignClientId"
-            AzureCodeSignClientSecret = "$($env:REPOSITORY_OWNER)-AzureCodeSignClientSecret"
-            CodeSignCertificateSubjectName = "$($env:REPOSITORY_OWNER)-CodeSignCertificateSubjectName"
-            NuGetRepositoryUrl = "$($env:REPOSITORY_OWNER)-NuGetRepositoryUrl"
-            NuGetUser = "$($env:REPOSITORY_OWNER)-NuGetUser"
-            SonarOrganization = "$($env:REPOSITORY_OWNER)-SonarOrganization"
-            SonarUrl = "$($env:REPOSITORY_OWNER)-SonarUrl"
-            SonarToken = "$($env:REPOSITORY_OWNER)-SonarToken"
-          }
+          function Get-SecretValueFromCandidates {
+            param(
+              [Parameter(Mandatory = $true)]
+              [string] $VariableName
+            )
 
-          foreach ($envName in $secretMap.Keys) {
-            $vaultSecretName = $secretMap[$envName]
-            $secretValue = az keyvault secret show --only-show-errors --vault-name $env:AZURE_KEYVAULT_NAME --name $vaultSecretName --query value -o tsv
+            $candidateNames = @(
+              "$($env:REPOSITORY_OWNER)-Public-$VariableName"
+              "$($env:REPOSITORY_OWNER)-$VariableName"
+              "$VariableName"
+            )
 
-            if ([string]::IsNullOrWhiteSpace($secretValue)) {
-              throw "Key Vault secret '$vaultSecretName' is empty or missing"
+            foreach ($candidateName in $candidateNames) {
+              $secretValue = az keyvault secret show --only-show-errors --vault-name $env:AZURE_KEYVAULT_NAME --name $candidateName --query value -o tsv 2>$null
+
+              if ($LASTEXITCODE -eq 0) {
+                return [string]$secretValue
+              }
             }
 
-            Write-Output "::add-mask::$secretValue"
+            throw "Key Vault secret for '$VariableName' was not found. Tried: $($candidateNames -join ', ')"
+          }
+
+          $secretVariables = @(
+            @{ VariableName = 'AzureCodeSignCertificateName'; MaskValue = $true }
+            @{ VariableName = 'AzureCodeSignTenantId'; MaskValue = $true }
+            @{ VariableName = 'AzureCodeSignClientId'; MaskValue = $true }
+            @{ VariableName = 'AzureCodeSignClientSecret'; MaskValue = $true }
+            @{ VariableName = 'CodeSignCertificateSubjectName'; MaskValue = $false }
+            @{ VariableName = 'NuGetRepositoryUrl'; MaskValue = $false }
+            @{ VariableName = 'NuGetUser'; MaskValue = $true }
+            @{ VariableName = 'SonarOrganization'; MaskValue = $false }
+            @{ VariableName = 'SonarUrl'; MaskValue = $false }
+            @{ VariableName = 'SonarToken'; MaskValue = $true }
+          )
+
+          foreach ($secretVariable in $secretVariables) {
+            $envName = $secretVariable.VariableName
+            $secretValue = Get-SecretValueFromCandidates -VariableName $envName
+
+            if ($secretVariable.MaskValue -and -not [string]::IsNullOrEmpty($secretValue)) {
+              Write-Output "::add-mask::$secretValue"
+            }
+
             Add-Content -Path $env:GITHUB_ENV -Value "$envName=$secretValue"
           }
 
@@ -153,11 +197,11 @@ jobs:
         with:
           target: 'BuildAndTest'
           arguments: |
-            IsCiBuild: true
-            SonarOrganization: ${{ env.SonarOrganization }}
-            SonarUrl: ${{ env.SonarUrl }}
-            SonarProject: ${{ github.repository_owner }}_${{ github.event.repository.name }}
-            SonarToken: ${{ env.SonarToken }}
+            IsCiBuild: "true"
+            SonarOrganization: "${{ env.SonarOrganization }}"
+            SonarUrl: "${{ env.SonarUrl }}"
+            SonarProject: "${{ github.repository_owner }}_${{ github.event.repository.name }}"
+            SonarToken: "${{ env.SonarToken }}"
 
       # Build & deploy
       - name: Build and deploy via Cake
@@ -167,16 +211,16 @@ jobs:
         with:
           target: 'BuildAndDeploy'
           arguments: |
-            AzureCodeSignCertificateName: ${{ env.AzureCodeSignCertificateName }}
-            AzureCodeSignClientId: ${{ env.AzureCodeSignClientId }}
-            AzureCodeSignClientSecret: ${{ env.AzureCodeSignClientSecret }}
-            AzureCodeSignTenantId: ${{ env.AzureCodeSignTenantId }}
-            AzureCodeSignVaultName: ${{ env.AzureCodeSignVaultName }}
-            CodeSignCertificateSubjectName: ${{ env.CodeSignCertificateSubjectName }}
-            IsCiBuild: false
-            NuGetRepositoryUrl: ${{ env.NuGetRepositoryUrl }}
-            SonarOrganization: ${{ env.SonarOrganization }}
-            SonarUrl: ${{ env.SonarUrl }}
-            SonarProject: ${{ github.repository_owner }}_${{ github.event.repository.name }}
-            SonarToken: ${{ env.SonarToken }}
-            NuGetRepositoryApiKey: ${{steps.nuget-login.outputs.NUGET_API_KEY}}
+            AzureCodeSignCertificateName: "${{ env.AzureCodeSignCertificateName }}"
+            AzureCodeSignClientId: "${{ env.AzureCodeSignClientId }}"
+            AzureCodeSignClientSecret: "${{ env.AzureCodeSignClientSecret }}"
+            AzureCodeSignTenantId: "${{ env.AzureCodeSignTenantId }}"
+            AzureCodeSignVaultName: "${{ env.AzureCodeSignVaultName }}"
+            CodeSignCertificateSubjectName: "${{ env.CodeSignCertificateSubjectName }}"
+            IsCiBuild: "false"
+            NuGetRepositoryUrl: "${{ env.NuGetRepositoryUrl }}"
+            NuGetRepositoryApiKey: "${{steps.nuget-login.outputs.NUGET_API_KEY}}"
+            SonarOrganization: "${{ env.SonarOrganization }}"
+            SonarUrl: "${{ env.SonarUrl }}"
+            SonarProject: "${{ github.repository_owner }}_${{ github.event.repository.name }}"
+            SonarToken: "${{ env.SonarToken }}"
