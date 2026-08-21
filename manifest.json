@@ -2767,11 +2767,11 @@
       "type": "Toc",
       "source_relative_path": "6.x/toc.yml",
       "output": {
-        ".html": {
-          "relative_path": "6.x/toc.html"
-        },
         ".json": {
           "relative_path": "6.x/toc.json"
+        },
+        ".html": {
+          "relative_path": "6.x/toc.html"
         }
       },
       "version": ""
@@ -2800,11 +2800,11 @@
       "type": "Toc",
       "source_relative_path": "toc.yml",
       "output": {
-        ".html": {
-          "relative_path": "toc.html"
-        },
         ".json": {
           "relative_path": "toc.json"
+        },
+        ".html": {
+          "relative_path": "toc.html"
         }
       },
       "version": ""
@@ -5123,11 +5123,11 @@
       "type": "Toc",
       "source_relative_path": "vnext/toc.yml",
       "output": {
-        ".html": {
-          "relative_path": "vnext/toc.html"
-        },
         ".json": {
           "relative_path": "vnext/toc.json"
+        },
+        ".html": {
+          "relative_path": "vnext/toc.html"
         }
       },
       "version": ""
