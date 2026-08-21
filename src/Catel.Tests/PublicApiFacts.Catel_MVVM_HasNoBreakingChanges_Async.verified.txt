@@ -1002,7 +1002,7 @@ namespace Catel.MVVM.Converters
         public LanguageConverter(Catel.Services.ILanguageService languageService) { }
         protected override object? Convert(string? value, System.Type targetType, object? parameter) { }
     }
-    [System.Windows.Data.ValueConversion(typeof(string?), typeof(object?))]
+    [System.Windows.Data.ValueConversion(typeof(string), typeof(object))]
     public class MethodToValueConverter : Catel.MVVM.Converters.ValueConverterBase
     {
         public MethodToValueConverter() { }
