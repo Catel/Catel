@@ -22,8 +22,8 @@
           "**/*.md",
           "**/*.yml"
         ],
-        "src": "vnext",
-        "dest": "vnext"
+        "src": "7.x",
+        "dest": "7.x"
       }
     ],
     "resource": [
@@ -48,8 +48,8 @@
           "css/**",
           "downloads/**"
         ],
-        "src": "vnext",
-        "dest": "vnext"
+        "src": "7.x",
+        "dest": "7.x"
       }
     ],
     "output": "../site",
