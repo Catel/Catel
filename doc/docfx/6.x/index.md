@@ -34,7 +34,7 @@ And more....
 
 ### Catel.MVVM
 
-Catel.MVVM is the library you want to include when you are writing a UI project (e.g. WPF, UWP, Xamarin) and you want to use the MVVM pattern. Catel is the *only* MVVM library that has context-aware view and view-model creation, which can be used to solve the [nested user controls problem](http://docs.catelproject.com/vnext/introduction/mvvm/introduction-to-nested-user-controls-problem/). 
+Catel.MVVM is the library you want to include when you are writing a UI project (e.g. WPF, UWP, Xamarin) and you want to use the MVVM pattern. Catel is the *only* MVVM library that has context-aware view and view-model creation, which can be used to solve the [nested user controls problem](introduction/mvvm/introduction-to-nested-user-controls-problem.md). 
 
 The most important
 features are listed below:

@@ -85,5 +85,5 @@ Note that Catel is already fully aware of parent/child relations of view models 
 
 ### Resolving views and view models
 
-Catel resolves views and view models by naming convention. This means that based on the name of a view, the view model can be determined. This also works the other way around where the view model can be determined based on the view. For more information, read about [naming conventions](https://catelproject.atlassian.net/wiki/display/CTL/Locators+and+naming+conventions).
+Catel resolves views and view models by naming convention. This means that based on the name of a view, the view model can be determined. This also works the other way around where the view model can be determined based on the view. For more information, read about [naming conventions](../../catel-mvvm/locators-naming-conventions/naming-conventions.md).
 
