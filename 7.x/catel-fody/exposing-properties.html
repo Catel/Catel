@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Exposing model properties on view models | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Exposing model properties on view models | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/catel-fody/exposing-properties.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>When using Catel's MVVM pattern, a view model often needs to forward properties from an underlying model. Without Catel.Fody, each forwarded property requires a full <code>ViewModelToModel</code> mapping plus a registered <code>PropertyData</code> field — a lot of repetitive code. The <code>[Expose]</code> attribute, weaved by Catel.Fody, eliminates this boilerplate.</p>
+<h2 id="the-problem-manual-property-forwarding">The problem: manual property forwarding</h2>
+<p>Using <code>[ViewModelToModel]</code> directly requires registering both the model property and the forwarded property:</p>
+<pre><code class="lang-csharp">[Model]
+public Person Person
+{
+    get { return GetValue&lt;Person&gt;(PersonProperty); }
+    private set { SetValue(PersonProperty, value); }
+}
+
+public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Person&quot;, typeof(Person));
+
+[ViewModelToModel(&quot;Person&quot;)]
+public string FirstName
+{
+    get { return GetValue&lt;string&gt;(FirstNameProperty); }
+    set { SetValue(FirstNameProperty, value); }
+}
+
+public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string));
+</code></pre>
+<p>For a model with many properties, this becomes very verbose.</p>
+<h2 id="the-solution-expose">The solution: [Expose]</h2>
+<p>The <code>[Expose]</code> attribute, combined with property weaving, lets you declare which model properties should be forwarded without writing the individual forwarded properties at all:</p>
+<pre><code class="lang-csharp">[Model]
+[Expose(&quot;FirstName&quot;)]
+[Expose(&quot;MiddleName&quot;)]
+[Expose(&quot;LastName&quot;)]
+private Person Person { get; set; }
+</code></pre>
+<p>Catel.Fody will:</p>
+<ol>
+<li>Register a dynamic property on the view model for each exposed name.</li>
+<li>Set up a <code>ViewModelToModel</code> mapping between that dynamic property and the corresponding model property.</li>
+</ol>
+<p>The result is functionally identical to defining each <code>[ViewModelToModel]</code> property by hand, including automatic validation synchronization between the model and the view model.</p>
+<h2 id="how-validation-synchronization-works">How validation synchronization works</h2>
+<p>When you expose properties from a model decorated with <code>[Model]</code>, Catel automatically copies validation results from the model to the view model. This means that validation errors on <code>Person.FirstName</code> are reflected directly on the <code>FirstName</code> property of the view model — no extra code required.</p>
+<h2 id="disabling-exposed-property-weaving">Disabling exposed property weaving</h2>
+<p>To disable this feature for the entire project, set <a href="configuration.html#weaveexposedproperties"><code>WeaveExposedProperties</code></a> to <code>false</code> in <code>FodyWeavers.xml</code>:</p>
+<pre><code class="lang-xml">&lt;Catel WeaveExposedProperties=&quot;false&quot; /&gt;
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/catel-fody/exposing-properties.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

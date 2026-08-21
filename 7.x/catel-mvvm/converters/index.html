@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Converters | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Converters | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/catel-mvvm/converters/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>In MVVM, there will be some point where you will need to use converters. Most of these converters are used in any project, so we have decided to add them to Catel. Below is a list of converters and a short description what they are used for.</p>
+<p>Note that the behavior of most converters can be inverted by using the <code>ConverterParameter</code></p>
+<h2 id="linking-converters">Linking converters</h2>
+<p>It is possible to link converters. To link converters, set the <code>Link</code> property in xaml:</p>
+<pre><code>&lt;catel:NullableValueConverter x:Key=&quot;NullableValueConverter&quot; /&gt;
+
+&lt;catel:BooleanToVisibilityConverter&gt;
+    &lt;catel:BooleanToVisibilityConverter.Link&gt;
+        &lt;code:NullToBoolConverter Link=&quot;{StaticResource NullableValueConverter}&quot; /&gt;
+    &lt;/catel:BooleanToVisibilityConverter.Link&gt;
+&lt;/catel:BooleanToVisibilityConverter&gt;
+</code></pre>
+<h2 id="available-converters">Available converters</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AreEqualMultiValueConverter</td>
+<td>Converts the comparison of 2 values to a boolean</td>
+</tr>
+<tr>
+<td>BooleanToCollapsingVisibilityConverter</td>
+<td>Convert from bool to <em>Visibility</em> and back.</td>
+</tr>
+<tr>
+<td>BooleanToHidingVisibilityConverter</td>
+<td>Convert from bool to <em>Visibility</em> and back.</td>
+</tr>
+<tr>
+<td>BooleanToGrayscaleConverter</td>
+<td>Converts a boolean to a grayscale saturation value. If the input is false, this converter will return 0, otherwise 1.</td>
+</tr>
+<tr>
+<td>BooleanToOppositeBooleanConverter</td>
+<td>Convert a boolean to it is inverted value.</td>
+</tr>
+<tr>
+<td>BooleanToTextConverter</td>
+<td>Converts a boolean value to text, for example &quot;yes&quot; and &quot;no&quot;, or &quot;x&quot; and &quot; &quot;.</td>
+</tr>
+<tr>
+<td>BooleanToCollapsingVisibilityConverter</td>
+<td>Convert from bool to <em>Visibility</em> and back. True returns <em>Visibility.Visible</em>, False returns <em>Visibility.Collapsed</em>.</td>
+</tr>
+<tr>
+<td>BooleanToHidingVisibilityConverter</td>
+<td>Convert from bool to <em>Visibility</em> and back. True returns <em>Visibility.Visible</em>, False returns <em>Visibility.Hidden</em>.</td>
+</tr>
+<tr>
+<td>ColorToBrushConverter</td>
+<td>Converts a color value to a brush and vice versa.</td>
+</tr>
+<tr>
+<td>ContainsItemsConverter</td>
+<td>Convert the count of an ICollection or IEnumerable to true or false, depending on whether the instance contains items.{{<br>}}- For an instance which implements ICollection, check Count &gt; 0.{{<br>}}- For an instance which implements IEnumerable, if the instance can be Enumerated.</td>
+</tr>
+<tr>
+<td>CountCollapsedConverter</td>
+<td>Converts the 'count' of ICollection, string, long, int or short to <em>Visibility.Visible</em> or <em>Visibility.Collapsed</em>{{<br>}}Visible means: ICollection.Count &gt; 0, String.Length &gt; 0 or long, int, short &gt; 0.</td>
+</tr>
+<tr>
+<td>CountHiddenConverter</td>
+<td>Converts the 'count' of ICollection, string, long, int or short to <em>Visibility.Visible</em> or <em>Visibility.Hidden</em>{{<br>}}Visible means: ICollection.Count &gt; 0, String.Length &gt; 0 or long, int, short &gt; 0.</td>
+</tr>
+<tr>
+<td>EmptyStringToCollapsingVisibilityConverter</td>
+<td>Converts a string to <em>Visibility</em>. If the string is empty, it will return <em>Visibility.Collapsed</em>.</td>
+</tr>
+<tr>
+<td>EmptyStringToHidingVisibilityConverter</td>
+<td>Converts a string to <em>Visibility</em>. If the string is empty, it will return <em>Visibility.Hidden</em>.</td>
+</tr>
+<tr>
+<td>EnumToCollapsingVisibilityConverter</td>
+<td>Converts an enum to <em>Visibility</em>. The allowed values must be defined inside the ConverterParameter as shown below (element will be visible when <em>MyEnumValue</em> is <em>Enum1</em> or <em>Enum3</em>):{{<br>}}{{<br>}}<code>&lt;TextBlock Visibility=&quot;{Binding MyEnumValue, Converter={converters:EnumToCollapsingVisibilityConverter}, ConverterParameter=Enum1\|Enum3}&quot;/&gt;</code>{{<br>}}{{<br>}}If the <em>ConverterParameter</em> starts with !, the element will not be visible for the specified enum values</td>
+</tr>
+<tr>
+<td>EnumToHidingVisibilityConverter</td>
+<td>Converts an enum to <em>Visibility</em>. The allowed values must be defined inside the ConverterParameter as shown below (element will be visible when <em>MyEnumValue</em> is <em>Enum1</em> or <em>Enum3</em>):{{<br>}}{{<br>}}<code>&lt;TextBlock Visibility=&quot;{Binding MyEnumValue, Converter={converters:EnumToHidingVisibilityConverter}, ConverterParameter=Enum1\|Enum3}&quot;/&gt;</code>{{<br>}}{{<br>}}If the <em>ConverterParameter</em> starts with !, the element will not be visible for the specified enum values</td>
+</tr>
+<tr>
+<td>FormattingConverter</td>
+<td>Formats the value using the format string provided in the ConverterParameter</td>
+</tr>
+<tr>
+<td>IsSelectedConverter</td>
+<td>Converts a selected value to either true of false.</td>
+</tr>
+<tr>
+<td>IsSelectedValueConverter</td>
+<td>Converts a selected value to either true of false.</td>
+</tr>
+<tr>
+<td>GetFirstValidationErrorConverter</td>
+<td>Converts a collection containing ValidationError objects to return the first error or an empty string in case there are no errors.</td>
+</tr>
+<tr>
+<td>IsSelectedConverter</td>
+<td>Converts a selected value to either true or false. Useful whena mutually exclusive selection must be made.</td>
+</tr>
+<tr>
+<td>IntToStringConverter</td>
+<td>Converts an inteteger to a string and back.</td>
+</tr>
+<tr>
+<td>LanguageConverter</td>
+<td>Converts the string (value) to a translated value using the <em>ILanguageService</em>. The parameter can be specified, then it should be a <em>CultureInfo</em>.</td>
+</tr>
+<tr>
+<td>MethodToValueConverter</td>
+<td>Converts the result of a method to a value. This makes it possible to bind to a method. <a href="http://geekswithblogs.net/claraoscura/archive/2008/10/17/125901.aspx">See Source</a></td>
+</tr>
+<tr>
+<td>MultiplyConverter</td>
+<td>Calculates the product of given value and factor in parameter.</td>
+</tr>
+<tr>
+<td>NullableValueConverter</td>
+<td>Converts a value to a representive value for nullable.</td>
+</tr>
+<tr>
+<td>ObjectToDisplayNameConverter</td>
+<td>Converts any value to a display name. Uses the DisplayNameAttribute to handle the tough work.</td>
+</tr>
+<tr>
+<td>PlatformToBooleanConverter</td>
+<td>Converts a value of <em>KnownPlatforms</em> to a boolean based on the current platform. This makes it possible to enable / disable functionality in shared projects based on the target platform.</td>
+</tr>
+<tr>
+<td>ReferenceToBooleanConverter</td>
+<td>Converts a reference to a boolean. If the reference is <em>null</em>, it will return <em>false</em>.</td>
+</tr>
+<tr>
+<td>ReferenceToCollapsingVisibilityConverter</td>
+<td>Converts a reference to <em>Visibility</em>. If the reference is <em>null</em>, it will return <em>Visibility.Collapsed</em>.</td>
+</tr>
+<tr>
+<td>ReferenceToHidingVisibilityConverter</td>
+<td>Converts a reference to <em>Visibility</em>. If the reference is <em>null</em>, it will return <em>Visibility.Hidden</em>.</td>
+</tr>
+<tr>
+<td>ShortDateFormattingConverter</td>
+<td>Converts a date to a short date and back.</td>
+</tr>
+<tr>
+<td>StringToIntConverter</td>
+<td>Converts string to an integer and back.</td>
+</tr>
+<tr>
+<td>ViewModelToViewConverter</td>
+<td>Converts a view model to a view. Great way to locate a view based on a view model inside xaml.</td>
+</tr>
+</tbody>
+</table>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/catel-mvvm/converters/index.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Validation in view models | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Validation in view models | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/catel-mvvm/view-models/validation-in-view-models.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>Validation is important to provide both feedback to the user, but also to ensure that no invalid data reaches the model or database. Catel offers several ways to implement validation. All options are described in this part of the documentation.</p>
+<h2 id="validation-in-models-via-mappings">Validation in models via mappings</h2>
+<p>The best way is to put validation into a model. Most model objects nowadays implement <code>INotifyPropertyChanged</code> and <code>IDataErrorInfo</code>, the most important classes that are required to use mappings from/to a model inside a view model.</p>
+<p>The great advantage of mapping properties from/to models automatically using Catel is that you do not have to write many plumbing yourself (getting and setting values in the model and view model). However, if the model implements <code>INotifyPropertyChanged</code> and *IDataErrorInfo<code>, Catel also automatically uses the validation from the model. For example, if there is a </code>Person<code>model that checks if the</code>FirstName<code>and</code>LastName` are entered, why rewrite this validation again in the view model?</p>
+<p>There are two ways to use automatic mappings.</p>
+<h3 id="mapping-via-viewmodeltomodelattribute">Mapping via ViewModelToModelAttribute</h3>
+<p>Mapping a model property by using the <em>ViewModelToModelAttribute</em> requires the definition of a model property and a separate property per mapped property. The code below automatically maps the <em>FirstName</em> property.</p>
+<pre><code>/// &lt;summary&gt;
+/// Gets or sets the person.
+/// &lt;/summary&gt;
+[Model]
+public Person Person
+{
+    get { return GetValue&lt;Person&gt;(PersonProperty); }
+    private set { SetValue(PersonProperty, value); }
+}
+
+/// &lt;summary&gt;
+/// Register the Person property so it is known in the class.
+/// &lt;/summary&gt;
+public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Person&quot;, typeof(Person));
+
+/// &lt;summary&gt;
+/// Gets or sets the first name.
+/// &lt;/summary&gt;
+[ViewModelToModel(&quot;Person&quot;)]
+public string FirstName
+{
+    get { return GetValue&lt;string&gt;(FirstNameProperty); }
+    set { SetValue(FirstNameProperty, value); }
+}
+
+/// &lt;summary&gt;
+/// Register the FirstName property so it is known in the class.
+/// &lt;/summary&gt;
+public static readonly PropertyData FirstNameProperty = RegisterProperty(&quot;FirstName&quot;, typeof(string));
+</code></pre>
+<p>If the <code>Person.FirstName</code> provides an error via the <code>IDataErrorInfo</code> interface, it will automatically be exposed by the view model as well.</p>
+<h3 id="mapping-via-exposeattribute">Mapping via ExposeAttribute</h3>
+<p>Mapping a property via the <code>ExposeAttribute</code> is even more simple, but has some disadvantages. First, consider the disadvantages before showing the code:</p>
+<ol>
+<li>Catel uses the <em>ICustomTypeDescriptor</em> interface to implement this behavior, and the interface is only available in WPF.</li>
+<li>The properties are not actually created, so you cannot use them inside your view model as real properties.</li>
+</ol>
+<p>In other words, the <code>ExposeAttribute</code> is only useful if 1) you are using WPF and 2) if the property is not used inside the view model but only declared to protect the model from the outside world. If both of these constraints are true, then the <code>ExposeAttribute</code> is definitely worth taking a look at. The usage is simple:</p>
+<pre><code>/// &lt;summary&gt;
+/// Gets or sets the person.
+/// &lt;/summary&gt;
+[Model]
+[Expose(&quot;FirstName&quot;)]
+[Expose(&quot;MiddleName&quot;)]
+[Expose(&quot;LastName&quot;)]
+private  Person Person
+{
+    get { return GetValue&lt;Person&gt;(PersonProperty); }
+    set { SetValue(PersonProperty, value); }
+}
+
+/// &lt;summary&gt;
+/// Register the Person property so it is known in the class.
+/// &lt;/summary&gt;
+public static readonly PropertyData PersonProperty = RegisterProperty(&quot;Person&quot;, typeof(Person));
+</code></pre>
+<p>declare the model property and decorate it with one or multiple <code>ExposeAttribute</code> instances. Not only are the properties automatically available for binding, the view model also checks for errors and automatically maps these as well.</p>
+<h2 id="validation-in-view-models">Validation in view models</h2>
+<p>Until now, we only spoke about automatic validation for validation that was written in the model. However, sometimes it is required to write validation inside the view model as well. One reason might be that the model is a POCO object not providing any validation. Or, sometimes there is a logical error that has nothing to do with the model, but should be shown to the user anyway.</p>
+<p>In such a case, Catel offers many possibilities to write custom validation inside the view model. Below are the possibilities:</p>
+<ul>
+<li>Field warnings</li>
+<li>Field errors</li>
+<li>Business rule warnings</li>
+<li>Business rule errors</li>
+</ul>
+<p>The difference between a field and business rule is that a field error or warning is specific for a property. These are returned via <code>IDataErrorInfo[&quot;propertyName&quot;]</code>. A business rule is a rule that applies to multiple fields or even a whole entity. Business rule validations are returned via <code>IDataErrorInfo.Error</code>.</p>
+<p>To implement validation into a view model, only two methods need to be implemented. Catel clearly separates the field validation from the business rule validation to make it much clearer to the developer what is going on.</p>
+<h3 id="validating-fields">Validating fields</h3>
+<p>To validate fields, one should override the <em>ValidateFields</em> method. Below is an example of field validation on a view model:</p>
+<pre><code>/// &lt;summary&gt;
+/// Validates the field values of this object. Override this method to enable
+/// validation of field values.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;validationResults&quot;&gt;The validation results, add additional results to this list.&lt;/param&gt;
+protected override void ValidateFields(List&lt;IFieldValidationResult&gt; validationResults)
+{
+    if (!string.IsNullOrEmpty(FirstName))
+    {
+        validationResults.Add(FieldValidationResult.CreateError(FirstNameProperty, &quot;First name cannot be empty&quot;));
+    }
+}
+</code></pre>
+<h3 id="validating-business-rules">Validating business rules</h3>
+<p>To validate business rules, one should override the <code>ValidateBusinessRules</code> method. Below is an example of business rule validation on a view model:</p>
+<pre><code>/// &lt;summary&gt;
+/// Validates the field values of this object. Override this method to enable
+/// validation of field values.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;validationResults&quot;&gt;The validation results, add additional results to this list.&lt;/param&gt;
+protected override void ValidateBusinessRules(List&lt;IBusinessRuleValidationResult&gt; validationResults)
+{
+    if (SomeBusinessErrorOccurs)
+    {
+        validationResults.Add(BusinessRuleValidationResult.CreateError(&quot;A business error occurred&quot;));
+    }
+}
+</code></pre>
+<h2 id="translating-model-validation-in-the-view-model">Translating model validation in the view model</h2>
+<p>Thanks to the validation system in Catel, it is easy to implement very advanced validation features in view models. The example below shows how to translate errors that are added to a model in the Data Access Layer or validation layer. Assume that the following pseudo code is used to set an error on a model in the DAL:</p>
+<pre><code>SetFieldError(“FirstName”, “FirstNameRequired”);
+</code></pre>
+<p>All errors that are mapped from the model to the view model automatically are available in the <code>validationResults</code> parameter. This way, the error can be translated:</p>
+<pre><code>/// &lt;summary&gt;
+/// Validates the field values of this object. Override this method to enable 
+/// validation of field values.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;validationResults&quot;&gt;The validation results, add additional results to this list.&lt;/param&gt;
+protected override void ValidateFields(List&lt;IFieldValidationResult&gt; validationResults)
+{
+   foreach (var validationResult in validationResults)
+   {
+      if (validationResult.Message == &quot;FirstNameRequired&quot;)
+      {
+         validationResult.Message = Properties.Resources.FirstNameRequired; 
+      }
+   }
+}
+</code></pre>
+<p>this is not something you want to actually do in your view model, so you will probably have to write a helper class that translates the validation for you. You might or might not like delaying the translation of the model errors to as close as the view, but it shows how extremely powerful the improved validation of Catel is. And if you think somewhat about it, would not it be a good idea to delay the translation from the server to the actual client to as close as the view…?</p>
+<h2 id="validating-via-annotations">Validating via annotations</h2>
+<p>Some people like to add validation to their (view)models using annotations (attributes). Catel also supports this method, but adds additional functionality. The idea behind it is that in the end, Catel always provides all errors of an object via the <code>IDataErrorInfo</code> interface. This means that when attribute validation is used, the errors are internally registered and provided in the <code>ValidateFields</code> method. This way, all types of validation that are provided by the .NET framework are gathered into one single location where they can be used by the view.</p>
+<pre><code>/// &lt;summary&gt;
+/// Gets or sets the first name.
+/// &lt;/summary&gt;
+[Required(&quot;This value is required&quot;)]
+private string FirstName
+{
+    get { return GetValue&lt;string&gt;(FirstNameProperty); }
+    set { SetValue(FirstNameProperty, value); }
+}
+
+/// &lt;summary&gt;
+/// Register the FirstName property so it is known in the class.
+/// &lt;/summary&gt;
+public static readonly PropertyData FirstNameProperty= RegisterProperty(&quot;FirstName&quot;, typeof(string));
+</code></pre>
+<h2 id="to-validate-required-fields-or-not-to-validate-required-fields-at-startup">To validate required fields or not to validate required fields at startup</h2>
+<p>Catel does not validate the properties with data annotations at startup. It will only validate the data annotations when properties change or when the view model is about to be saved. This is implemented this way to allow a developer to show required fields with an asterisk (*) instead of errors. If a developer still wants to initially display errors, only a single call has to be made in the constructor:</p>
+<pre><code>Validate(true, false);
+</code></pre>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/catel-mvvm/view-models/validation-in-view-models.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Performance considerations | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Performance considerations | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/faq/performance-considerations.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>While developing software, it is important to keep an eye on the performance. Catel itself does perform very well, but there are some caveats that you should be aware of. If you have the feeling that the application is laggy or slow, or if you want to ensure to squeeze the best performance out of Catel, consider taking a closer look at the checklist below.</p>
+<p>Use the [ApiCop feature]({{&lt; relref &quot;catel-core/apicop/_index.md&quot; &gt;}}) to get a detailed advisory report on your software</p>
+<h2 id="general">General</h2>
+<h3 id="disable-the-call-to-logmanageradddebuglistener">Disable the call to LogManager.AddDebugListener</h3>
+<p>The <code>DebugListener</code> is a useful class while developing an application. It throws all the logging of Catel to the output window of Visual Studio which allows you to view exactly what happens behind the scenes. However, writing all these logs to the output window is very expensive and might cause an application to perform badly.</p>
+<p>Therefore, it is important to disable any call to <code>LogManager.AddDebugListener</code> when releasing an application or while performance testing.</p>
+<p>Best way to deal with this is to wrap it inside the <code>DEBUG</code> define:</p>
+<pre><code>#if DEBUG
+    LogManager.AddDebugListener();
+#endif
+</code></pre>
+<h3 id="preloading-assemblies-into-the-appdomain">Preloading assemblies into the AppDomain</h3>
+<p>Preloading assemblies might result in a slower startup time, but will not cause slow downs for reflection or assembly loading during the actual application execution. To preload assemblies using Catel, call this extension method:</p>
+<p>**
+**</p>
+<p><strong>WPF application</strong></p>
+<p>In App.xaml.cs, add the following code</p>
+<pre><code>var directory = typeof(MainWindow).Assembly.GetDirectory();
+AppDomain.CurrentDomain.PreloadAssemblies(directory);
+</code></pre>
+<p><strong>ASP.NET application</strong></p>
+<p>In global.asax, add the following code:</p>
+<pre><code>var directory = Server.MapPath(&quot;~/bin&quot;);
+AppDomain.Current.PreloadAssemblies(directory);
+</code></pre>
+<h3 id="warming-up-the-serializers">Warming up the serializers</h3>
+<p>To improve performance for serialization, [warm up the serializers]({{&lt; relref &quot;catel-core/serialization/_index.md&quot; &gt;}}).</p>
+<h2 id="mvvm">MVVM</h2>
+<h3 id="set-skipsearchingforinfobarmessagecontrol-on-usercontrol-to-true">Set SkipSearchingForInfoBarMessageControl on UserControl to true</h3>
+<p>By default, Catel assumes that an InfoBarMessageControl is located on any window. However, it might be that this control is not located on a window that contains an instance of the UserControl class. This might decrease the performance, especially when many user controls are used in a hierarchical way. The cause is that the UserControlLogic searches for an InfoBarMessageControl to register the view model to.</p>
+<p>If no <em>InfoBarMessageControl</em> is located on a container, ensure to set <em>SkipSearchingForInfoBarMessageControl</em> to <em>true</em>.</p>
+<pre><code>// Use when not using styles and transitions
+Catel.Windows.Controls.UserControl.DefaultTransferStylesAndTransitionsToViewModelGridValue = false; 
+
+// Use when not using any validation controls
+Catel.Windows.Controls.UserControl.DefaultSkipSearchingForInfoBarMessageControlValue = true;
+Catel.Windows.Controls.UserControl.DefaultCreateWarningAndErrorValidatorForViewModelValue = false;
+</code></pre>
+<h3 id="use-the-fastobservablecollection">Use the FastObservableCollection</h3>
+<p>The FastObservableCollection does not raise events for every item, but only invokes events for the complete range of items added to or removed from the collection.</p>
+<p>When modifying a large collection of items, it is not required to raise change events for each added / removed value. Therefore the FastObservableCollection will disable change notifications until the full collection modification is done and then raise the change events just once.</p>
+<h3 id="use-the-fastobservabledictionary">Use the FastObservableDictionary</h3>
+<p>Designed in a similar fashion to the <code>FastObservableCollection</code>, the <code>FastObservableDictionary</code> is meant for Views that need to leverage the power of a dictionary for controls such as <code>ComboBox</code> without sacrificing performance and providing real-time feedback to the user.</p>
+<p>In addition to implementing <code>FastObservableDictionary</code>, any implementations of a <code>ComboBox</code> should leverage a <code>VirtualizingStackPanel</code> to minimize the amount of elements rendered at a given time. An example is provided below:</p>
+<pre><code>&lt;ItemsPanelTemplate x:Key=&quot;VirtualizingItemsPanelTemplate&quot;&gt;
+    &lt;VirtualizingStackPanel /&gt;
+&lt;/ItemsPanelTemplate&gt;
+
+&lt;CombBox DisplayMemberPath=&quot;Value&quot;
+         ItemsSource=&quot;{Binding Options}&quot; 
+         ItemsPanel=&quot;{StaticResource VirtualizingItemsPanelTemplate}&quot;
+         SelectedValuePath=&quot;Key&quot;
+         SelectedItem=&quot;{Binding SelectedItem}&quot; /&gt;
+</code></pre>
+<h3 id="specify-throttling-on-the-viewmodelbase">Specify throttling on the ViewModelBase</h3>
+<p>The <em>ViewModelBase</em> allows the specify the throttling of the property change notifications. In normal situations it is best to directly raise property change notifications. However, when many properties change a lot within a very short timeframe, it might be interesting to enable throttling. By using throttling, the change notifications are not directly sent to the UI but instead added to a dictionary. Then each time the <em>ThottlingRate</em> is reached, the change notifications are sent in batches to the view. If the same property has changed several times in a specific time frame, it will only be raised once which might give a performance boost in very specific situations.</p>
+<p>By default, throttling is disabled but can be enabled by setting the <em>ThrottlingRate</em> property:</p>
+<pre><code>ThrottlingRate = new TimeSpan(0, 0, 0, 0, 200);
+</code></pre>
+<p>The <em>AdvancedDemo</em> example contains a demo that shows the impact of throttling</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/faq/performance-considerations.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

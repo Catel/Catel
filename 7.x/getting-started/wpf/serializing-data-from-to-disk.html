@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Serializing data from/to disk | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Serializing data from/to disk | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/getting-started/wpf/serializing-data-from-to-disk.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<blockquote>
+<p><strong>Note:</strong> The Catel serialization engine (<code>IXmlSerializer</code>, <code>SavableModelBase</code>) was removed in Catel 7. The <code>ServiceLocator</code> IoC container was also removed in Catel 7 in favor of standard .NET dependency injection.</p>
+<p>For serialization, this guide uses <code>Orc.Serialization.Json</code>. Other alternatives include <code>System.Text.Json</code> and <code>Newtonsoft.Json</code>.
+For dependency injection, register services in <code>IServiceCollection</code> using <code>services.AddCatelCore()</code> and <code>services.AddCatelMvvm()</code>.</p>
+</blockquote>
+<p>In this step we will create services that will serialize the models from/to disk. Services are a great way to abstract functionality that can be used in every part of the application.</p>
+<h2 id="creating-the-service-definition">Creating the service definition</h2>
+<p>The first thing to do is to create the <em>Services</em> folder to group the services. Below is a screenshot of how to solution will look after creating the folders:</p>
+<p><img src="../../images/getting-started/wpf/serializing-data-from-to-disk/solutionexplorer.png" alt=""></p>
+<p>Then add a new interface to the <code>Interfaces</code> folder named <code>IFamilyService</code>. This will manage the families that are avaiable. Below is the interface defined:</p>
+<pre><code class="lang-csharp">namespace WPF.GettingStarted.Services
+{
+    using WPF.GettingStarted.Models;
+
+    public interface IFamilyService
+    {
+        IEnumerable&lt;Family&gt; LoadFamilies();
+        void SaveFamilies(IEnumerable&lt;Family&gt; families);
+    }
+}
+</code></pre>
+<h2 id="creating-the-service-implementation">Creating the service implementation</h2>
+<p>First, add the <code>Orc.Serialization.Json</code> and <code>Orc.FileSystem</code> NuGet packages to the project:</p>
+<pre><code>dotnet add package Orc.Serialization.Json
+dotnet add package Orc.FileSystem
+</code></pre>
+<p>Below is an example implementation using <code>Orc.Serialization.Json</code> for serialization and <code>Orc.FileSystem</code> for file access:</p>
+<pre><code class="lang-csharp">namespace WPF.GettingStarted.Services
+{
+    using System.Collections.Generic;
+    using System.IO;
+    using Orc.FileSystem;
+    using Orc.Serialization.Json;
+    using WPF.GettingStarted.Models;
+
+    public class FamilyService : IFamilyService
+    {
+        private readonly string _path;
+        private readonly IFileService _fileService;
+        private readonly IDirectoryService _directoryService;
+        private readonly IJsonSerializer _jsonSerializer;
+
+        public FamilyService(IFileService fileService, IDirectoryService directoryService,
+            IJsonSerializerFactory jsonSerializerFactory)
+        {
+            ArgumentNullException.ThrowIfNull(fileService);
+            ArgumentNullException.ThrowIfNull(directoryService);
+            ArgumentNullException.ThrowIfNull(jsonSerializerFactory);
+
+            _fileService = fileService;
+            _directoryService = directoryService;
+            _jsonSerializer = jsonSerializerFactory.CreateSerializer();
+
+            string directory = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                &quot;CatenaLogic&quot;, &quot;WPF.GettingStarted&quot;);
+
+            _directoryService.Create(directory);
+            _path = Path.Combine(directory, &quot;family.json&quot;);
+        }
+
+        public IEnumerable&lt;Family&gt; LoadFamilies()
+        {
+            if (!_fileService.Exists(_path))
+            {
+                return Array.Empty&lt;Family&gt;();
+            }
+
+            using var stream = _fileService.Open(_path, FileMode.Open, FileAccess.Read, FileShare.Read);
+            return _jsonSerializer.Deserialize&lt;List&lt;Family&gt;&gt;(stream) ?? new List&lt;Family&gt;();
+        }
+
+        public void SaveFamilies(IEnumerable&lt;Family&gt; families)
+        {
+            using var stream = _fileService.Create(_path);
+            _jsonSerializer.Serialize(stream, families);
+        }
+    }
+}
+</code></pre>
+<h2 id="registering-the-service-in-the-service-collection">Registering the service in the service collection</h2>
+<p>Now we have created the service, it is time to register it in the service collection. In the <code>App.xaml.cs</code>, add the following code:</p>
+<pre><code class="lang-csharp">// AddOrcFileSystem registers IFileService and IDirectoryService, which FamilyService depends on
+services.AddOrcFileSystem();
+// AddOrcSerializationJson registers IJsonSerializerFactory, which FamilyService depends on
+services.AddOrcSerializationJson();
+services.AddSingleton&lt;IFamilyService, FamilyService&gt;();
+</code></pre>
+<p>The call to <code>AddOrcFileSystem()</code> registers <code>IFileService</code> and <code>IDirectoryService</code>. The call to <code>AddOrcSerializationJson()</code> registers the <code>IJsonSerializerFactory</code> which is injected into <code>FamilyService</code>.</p>
+<h2 id="adding-the-service-usage-to-the-mainwindowviewmodel">Adding the service usage to the MainWindowViewModel</h2>
+<p>Now the service is registered, it can be used anywhere in the application. A great place to load and save the families is in the <code>MainWindowViewModel</code> which contains all the logic of the main application window.</p>
+<h3 id="injecting-the-service-via-dependency-injection">Injecting the service via dependency injection</h3>
+<p>To get an instance of the service in the view model, change the constructor to the following definition.</p>
+<pre><code class="lang-csharp">private readonly IFamilyService _familyService;
+
+/// &lt;summary&gt;
+/// Initializes a new instance of the &lt;see cref=&quot;MainWindowViewModel&quot;/&gt; class.
+/// &lt;/summary&gt;
+public MainWindowViewModel(IServiceProvider serviceProvider, IFamilyService familyService)
+    : base(serviceProvider)
+{
+    _familyService = familyService;
+}
+</code></pre>
+<h3 id="creating-the-families-property-on-the-mainwindowviewmodel">Creating the Families property on the MainWindowViewModel</h3>
+<p>The next thing we need is a <code>Families</code> property on the <code>MainWindowViewModel</code> to store the families we load from disk. Below is the property definition for that:</p>
+<pre><code class="lang-csharp">/// &lt;summary&gt;
+/// Gets the families.
+/// &lt;/summary&gt;
+public ObservableCollection&lt;Family&gt; Families
+{
+    get { return GetValue&lt;ObservableCollection&lt;Family&gt;&gt;(FamiliesProperty); }
+    private set { SetValue(FamiliesProperty, value); }
+}
+
+/// &lt;summary&gt;
+/// Register the Families property so it is known in the class.
+/// &lt;/summary&gt;
+public static readonly PropertyData FamiliesProperty = RegisterProperty&lt;ObservableCollection&lt;Family&gt;&gt;(nameof(Families));
+</code></pre>
+<h3 id="loading-the-families-at-startup">Loading the families at startup</h3>
+<p>Now we have the <code>IFamilyService</code> and the <code>Families</code> property, it is time to combine these two. To do this, we need to override the <code>InitializeAsync</code> method on the view model which is automatically called as soon as the view is loaded by Catel:</p>
+<pre><code class="lang-csharp">protected override async Task InitializeAsync()
+{
+    var families = _familyService.LoadFamilies();
+    Families = new ObservableCollection&lt;Family&gt;(families);
+}
+</code></pre>
+<h3 id="saving-the-families-at-shutdown">Saving the families at shutdown</h3>
+<p>To save the families at shutdown, override the <code>CloseAsync</code> method on the view model which is automatically called as soon as the view is closed by Catel:</p>
+<pre><code class="lang-csharp">protected override async Task CloseAsync()
+{
+    _familyService.SaveFamilies(Families);
+}
+</code></pre>
+<p>After running the application once, a new file will be stored in the following directory:</p>
+<p><em>C:\Users\[yourusername]\AppData\Roaming\CatenaLogic\WPF.GettingStarted</em></p>
+<h2 id="up-next">Up next</h2>
+<p>[Creating the view models]({{&lt; relref &quot;getting-started/wpf/creating-the-view-models.md&quot; &gt;}})</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/getting-started/wpf/serializing-data-from-to-disk.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

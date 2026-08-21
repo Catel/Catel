@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Hooking a command to validation automatically | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Hooking a command to validation automatically | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/catel-mvvm/commands-events/hooking-command-to-validation.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>It is possible to hook the <code>CanExecute</code> of a <code>Command</code> to the <code>IValidationSummary</code> automatically. This way, there is no need to check for errors manually in the <code>CanExecute</code> method. The example below first adds a validation summary to a view model to get the validation result. Then, it uses this validation summary to automatically determine whether a command can be executed.</p>
+<ol>
+<li>Add validation to a person view model (note how the validation adds the tag <code>PersonValidation</code> to a validation):</li>
+</ol>
+<pre><code>/// &lt;summary&gt;
+/// Validates the field values of this object. Override this method to enable
+/// validation of field values.
+/// &lt;/summary&gt;
+/// &lt;param name=&quot;validationResults&quot;&gt;The validation results, add additional results to this list.&lt;/param&gt;
+protected override void ValidateFields(System.Collections.Generic.List&lt;IFieldValidationResult&gt; validationResults)
+{
+    if (string.IsNullOrEmpty(FirstName))
+    {
+        validationResults.Add(FieldValidationResult.CreateErrorWithTag(FirstNameProperty, &quot;First name cannot be empty&quot;, &quot;PersonValidation&quot;));
+    }
+
+    if (string.IsNullOrEmpty(LastName))
+    {
+        validationResults.Add(FieldValidationResult.CreateErrorWithTag(LastNameProperty, &quot;Last name cannot be empty&quot;, &quot;PersonValidation&quot;));
+    }
+}
+</code></pre>
+<ol start="2">
+<li>Add a property to the view model containing the validation summary using the <code>ValidationToViewModel</code> attribute.</li>
+</ol>
+<pre><code>[ValidationToViewModel(Tag = &quot;PersonValidation&quot;)]
+public IValidationSummary PersonValidationSummary { get; set; }
+</code></pre>
+<ol start="3">
+<li>Define a command on the view model:</li>
+</ol>
+<pre><code>/// &lt;summary&gt;
+/// Gets the Save command.
+/// &lt;/summary&gt;
+public Command Save { get; private set; }
+
+/// &lt;summary&gt;
+/// Method to invoke when the Save command is executed.
+/// &lt;/summary&gt;
+private void OnSaveExecute()
+{
+    // TODO: Handle command logic here
+}
+</code></pre>
+<ol start="4">
+<li>Create the command that automatically uses the validation summary using the <code>CommandHelper</code> class:</li>
+</ol>
+<pre><code>Save = CommandHelper.CreateCommand(OnSaveExecute, () =&gt; PersonValidationSummary);
+</code></pre>
+<p>With this example, the <code>Save</code> command on the view model can only be executed when there are no errors with the <code>PersonValidation</code> tag.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/catel-mvvm/commands-events/hooking-command-to-validation.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

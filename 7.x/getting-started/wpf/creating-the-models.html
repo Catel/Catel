@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Creating the models | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Creating the models | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/getting-started/wpf/creating-the-models.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>In this step we will create the models. The application manages persons, so we need a <code>Person</code> model and a <code>Gender</code> enum.</p>
+<h2 id="creating-the-gender-enum">Creating the Gender enum</h2>
+<p>Add a new file <code>Gender.cs</code> to the <code>Models</code> folder:</p>
+<pre><code class="lang-csharp">namespace Catel.Examples.PersonApplication.Models;
+
+public enum Gender
+{
+    Unknown,
+    Male,
+    Female
+}
+</code></pre>
+<h2 id="creating-the-person-model">Creating the Person model</h2>
+<p>Models in Catel derive from <code>ModelBase</code> or <code>ValidatableModelBase</code>. <code>ValidatableModelBase</code> adds built-in support for validation via <code>ValidateFields</code> and <code>ValidateBusinessRules</code>.</p>
+<p>When <strong>Catel.Fody</strong> is installed, you can write plain auto-properties and Catel.Fody will automatically generate the backing <code>PropertyData</code> registration and change notification at compile time. This removes all the repetitive boilerplate code.</p>
+<p>Add a new file <code>Person.cs</code> to the <code>Models</code> folder:</p>
+<pre><code class="lang-csharp">namespace Catel.Examples.PersonApplication.Models;
+
+using System.Collections.Generic;
+using Catel.Data;
+
+public class Person : ValidatableModelBase
+{
+    public string FirstName { get; set; }
+
+    public string MiddleName { get; set; }
+
+    public string LastName { get; set; }
+
+    public Gender Gender { get; set; }
+
+    protected override void ValidateFields(List&lt;IFieldValidationResult&gt; validationResults)
+    {
+        if (string.IsNullOrEmpty(FirstName))
+        {
+            validationResults.Add(FieldValidationResult.CreateError(nameof(FirstName), &quot;First name is required&quot;));
+        }
+
+        if (string.IsNullOrEmpty(LastName))
+        {
+            validationResults.Add(FieldValidationResult.CreateError(nameof(LastName), &quot;Last name is required&quot;));
+        }
+
+        if (Gender == Gender.Unknown)
+        {
+            validationResults.Add(FieldValidationResult.CreateError(nameof(Gender), &quot;Gender cannot be unknown&quot;));
+        }
+    }
+}
+</code></pre>
+<p>Note that validation is built directly into the model. Catel will automatically surface these validation errors through <code>IDataErrorInfo</code> so that WPF validation bindings work out of the box.</p>
+<h2 id="up-next">Up next</h2>
+<p>[Creating the view models]({{&lt; relref &quot;getting-started/wpf/creating-the-view-models.md&quot; &gt;}})</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/getting-started/wpf/creating-the-models.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

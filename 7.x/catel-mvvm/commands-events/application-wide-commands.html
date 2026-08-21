@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>CommandManager and command containers (Application-wide commands) | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="CommandManager and command containers (Application-wide commands) | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/catel-mvvm/commands-events/application-wide-commands.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>Most commands are registered per view and available per view model. Some commands (such as commands on a <code>Ribbon</code> or <code>Toolbar</code>) are application-wide. Catel supports both types, and this part of the documentation explains how to use the <code>ICommandManager</code> to work with application-wide commands such as <code>Refresh</code> with a key bound to <code>F5</code>.</p>
+<h2 id="commandmanager">CommandManager</h2>
+<p>There is no generic way to specify application-wide commands in XAML platforms. To overcome this issue, Catel introduces the <em>CommandManager</em>. This manager allows to create commands which are hosted by the <em>CommandManager</em>. The commands on the command manager can be created with input gestures. Once a view model wants to hook into a specific command, it only has to register the view model command with the application-wide command.</p>
+<p>Note that application-wide commands by default are only available on the main window of an application. To support this on other windows, add the following code in the constructor of a window:</p>
+<pre><code>public class SomeWindow
+{
+    private readonly CommandManagerWrapper _commandManagerWrapper;
+
+    public SomeWindow()
+    {
+        InitializeComponent();
+
+        _commandManagerWrapper = new CommandManagerWrapper(this);
+    }
+}
+</code></pre>
+<h2 id="creating-application-wide-commands">Creating application-wide commands</h2>
+<p>To create application-wide commands, inject the <em>ICommandManager</em> via the constructor and create the command:</p>
+<pre><code class="lang-csharp">private readonly ICommandManager _commandManager;
+
+public MyInitializationClass(ICommandManager commandManager)
+{
+    _commandManager = commandManager;
+    _commandManager.CreateCommand(&quot;Refresh&quot;, new InputGesture(Key.F5));
+}
+</code></pre>
+<p>It is recommended to put all the command creation in a single place so they are manageable.</p>
+<h3 id="registering-a-custom-command">Registering a custom command</h3>
+<p>When a view model wants to use application-wide specific commands, the only thing it has to do is register the command in the <em>CommandManager</em>.</p>
+<pre><code>public class CommandSubscribingViewModel : ViewModelBase
+{
+    private readonly IMessageService _messageService;
+
+    public CommandSubscribingViewModel(ICommandManager commandManager, IMessageService messageService)
+    {
+        Argument.IsNotNull(() =&gt; commandManager);
+        Argument.IsNotNull(() =&gt; messageService);
+
+        _messageService = messageService;
+
+        ExampleCommand = new Command(OnExampleCommandExecute);
+        commandManager.RegisterCommand(&quot;Refresh&quot;, ExampleCommand, this);
+    }
+
+    public Command ExampleCommand { get; private set; }
+
+    private async void OnExampleCommandExecute()
+    {
+        await _messageService.ShowAsync(&quot;Application-wide command executed&quot;);
+    }
+}
+</code></pre>
+<h3 id="using-application-wide-commands-in-xaml">Using application-wide commands in xaml</h3>
+<p>To make it easy to bind to application-wide commands, Catel provides the *CommandManagerBinding *markup extension. To bind to commands in xaml, use the following code:</p>
+<pre><code>&lt;Ribbon catel:StackGrid.ColumnSpan=&quot;4&quot;&gt;
+    &lt;RibbonTab Header=&quot;Home&quot; KeyTip=&quot;H&quot; &gt;
+        &lt;RibbonGroup Header=&quot;Example commands&quot;&gt;
+            &lt;RibbonButton Command=&quot;{catel:CommandManagerBinding Refresh}&quot; LargeImageSource=&quot;..\Resources\Images\Refresh.png&quot; 
+                          Label=&quot;Refresh&quot; KeyTip=&quot;F5&quot; /&gt;
+        &lt;/RibbonGroup&gt;
+    &lt;/RibbonTab&gt;
+&lt;/Ribbon&gt;
+</code></pre>
+<p>As the code shows, the <em>CommandManagerBinding</em> extension automatically resolves the <em>Refresh</em> command from the <em>CommandManager</em>.</p>
+<h2 id="command-containers">Command containers</h2>
+<p>When implementing a ribbon or any menu structure inside an application can result in a very complex view model containing all the commands. Catel solves this issue by implementing so-called command containers. These are containers that have only 1 purpose: contain a command so the logic can be viewed / edited and the commands will be available during the whole lifetime of the app. Internally command containers use the <em>ICommandManager</em> to register commands, so the <em>ICommandManager</em> is still responsible for the commands.</p>
+<h3 id="creating-a-command-container">Creating a command container</h3>
+<p>Creating a command container is simple. It can be done by creating a class deriving from <em>CommandContainerBase</em> as shown in the example below:</p>
+<pre><code>public class ApplicationAboutCommandContainer : CommandContainerBase
+{
+    private readonly IAboutService _aboutService;
+
+    public ApplicationAboutCommandContainer(ICommandManager commandManager, IAboutService aboutService)
+        : base(Commands.Application.About, commandManager)
+    {
+        Argument.IsNotNull(() =&gt; aboutService);
+
+        _aboutService = aboutService;
+    }
+
+    protected override Execute(object parameter)
+    {
+        _aboutService.ShowAbout();
+    }
+}
+</code></pre>
+<p>As shown, the implementation is very clean and will not pollute any other view models.</p>
+<h3 id="registering-a-command-container">Registering a command container</h3>
+<p>If you do not use the extension methods below, you must register the command container inside the service locator and register the command inside the <em>ICommandManager</em>. To make this process easier, use a definition file and the code below.</p>
+<h4 id="command-definitions">Command definitions</h4>
+<p>To make it easy to register new commands, Catel uses naming conventions and extension methods. The name of the command (for example, <em>About</em> must be a constant on the command definitions class). If the command definition also contains a <em>&lt;CommandName&gt;InputGesture</em>, in this case <em>AboutInputGesture</em>, it will use that input gesture as a default to register the command with.</p>
+<pre><code>public static class Commands
+{
+    public static class Application
+    {
+        public const string Exit = &quot;Application.Exit&quot;;
+        public static readonly InputGesture ExitInputGesture = new InputGesture(Key.F4, ModifierKeys.Alt);
+
+        public const string About = &quot;Application.About&quot;;
+        public static readonly InputGesture AboutInputGesture = new InputGesture(Key.F1);
+    }
+
+    public static class OtherPartOfApplication
+    {
+        public const string SomeCommand = &quot;OtherPartOfApplication.SomeCommand&quot;;
+        public static readonly InputGesture SomeCommandInputGesture = null;
+    }
+}
+</code></pre>
+<p>It is recommended to keep a well formed structure for your command definitions to keep them manageable, even in large applications</p>
+<h4 id="registering-the-command-container-using-icommandmanager">Registering the command container using ICommandManager</h4>
+<p>Once you have the command container and the command definition (command name and the input gesture), it is time to register the command container. Inject <code>ICommandManager</code> and <code>IServiceProvider</code> via the constructor and use:</p>
+<pre><code class="lang-csharp">_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(Commands.Application), &quot;About&quot;);
+</code></pre>
+<p>This will keep the command registration very readable and maintainable when using many commands:</p>
+<pre><code class="lang-csharp">_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(AppCommands.Application), &quot;Exit&quot;);
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(AppCommands.Application), &quot;About&quot;);
+
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(Commands.Project), &quot;Open&quot;);
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(Commands.Project), &quot;Save&quot;);
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(Commands.Project), &quot;SaveAs&quot;);
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(Commands.Project), &quot;Refresh&quot;);
+
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(AppCommands.Settings), &quot;ToggleTooltips&quot;);
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(AppCommands.Settings), &quot;ToggleQuickFilters&quot;);
+
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(ExtensibilityCommands.Application), &quot;Extensions&quot;);
+_commandManager.CreateCommandWithGesture(_serviceProvider, typeof(ExtensibilityCommands.Application), &quot;ExtensionsSettings&quot;);
+</code></pre>
+<h4 id="registering-command-containers-using-the-service-collection">Registering command containers using the service collection</h4>
+<p>When building a DI-first application, commands can be registered declaratively during service collection setup using the <code>IServiceCollectionExtensions</code> from the <code>Catel.MVVM</code> namespace. This approach defers command and container creation until startup, which is the recommended pattern for applications using <code>Microsoft.Extensions.DependencyInjection</code>.</p>
+<p>Use the <code>AddCommandWithInputGesture</code> extension method on <code>IServiceCollection</code>:</p>
+<pre><code class="lang-csharp">services.AddCommandWithInputGesture(typeof(AppCommands.Application), &quot;Exit&quot;);
+services.AddCommandWithInputGesture(typeof(AppCommands.Application), &quot;About&quot;);
+
+services.AddCommandWithInputGesture(typeof(Commands.Project), &quot;Open&quot;);
+services.AddCommandWithInputGesture(typeof(Commands.Project), &quot;Save&quot;);
+services.AddCommandWithInputGesture(typeof(Commands.Project), &quot;SaveAs&quot;);
+services.AddCommandWithInputGesture(typeof(Commands.Project), &quot;Refresh&quot;);
+
+services.AddCommandWithInputGesture(typeof(AppCommands.Settings), &quot;ToggleTooltips&quot;);
+services.AddCommandWithInputGesture(typeof(AppCommands.Settings), &quot;ToggleQuickFilters&quot;);
+</code></pre>
+<p>Each call registers a <code>CommandContainerRegistration</code> as a singleton in the container. <code>CommandContainerRegistration</code> implements <code>IInitializeAtStartup</code>, which means all commands are registered in the <code>ICommandManager</code> and their corresponding command containers are created when the application calls:</p>
+<pre><code class="lang-csharp">serviceProvider.CreateTypesThatMustBeConstructedAtStartup();
+</code></pre>
+<p>This ensures all command containers are fully initialized before the application begins handling user interactions, following the standard Catel startup pattern.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/catel-mvvm/commands-events/application-wide-commands.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

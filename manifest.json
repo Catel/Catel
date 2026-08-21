@@ -2777,6 +2777,2329 @@
       "version": ""
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/argument-checking/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/argument-checking/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/caching/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/caching/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/configuration/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/configuration/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/data-handling/advanced-property-change-notifications.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/data-handling/advanced-property-change-notifications.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/data-handling/childawaremodelbase.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/data-handling/childawaremodelbase.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/data-handling/comparablemodelbase.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/data-handling/comparablemodelbase.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/data-handling/dispatcherobservableobject.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/data-handling/dispatcherobservableobject.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/data-handling/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/data-handling/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/data-handling/modelbase.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/data-handling/modelbase.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/data-handling/observableobject.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/data-handling/observableobject.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/data-handling/property-bags.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/data-handling/property-bags.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/data-handling/savablemodelbase.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/data-handling/savablemodelbase.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/data-handling/using-modelbase-as-base-for-entities.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/data-handling/using-modelbase-as-base-for-entities.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/data-handling/validatablemodelbase.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/data-handling/validatablemodelbase.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/exception-handling/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/exception-handling/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/exception-handling/wpf-implementation-for-exception-handling.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/exception-handling/wpf-implementation-for-exception-handling.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/messaging/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/messaging/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/messaging/message-mediator.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/messaging/message-mediator.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/messaging/messagebase.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/messaging/messagebase.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/messaging/messaging-via-attributes.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/messaging/messaging-via-attributes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/multilingual/displayattribute.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/multilingual/displayattribute.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/multilingual/displaynameattribute.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/multilingual/displaynameattribute.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/multilingual/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/multilingual/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/parallel-invocation-tasks/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/parallel-invocation-tasks/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/parallel-invocation-tasks/thread-safe-code.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/parallel-invocation-tasks/thread-safe-code.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/preventing-memory-leaks/change-notification-wrapper.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/preventing-memory-leaks/change-notification-wrapper.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/preventing-memory-leaks/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/preventing-memory-leaks/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/preventing-memory-leaks/weak-events.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/preventing-memory-leaks/weak-events.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/reflection/fastmemberinvoker.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/reflection/fastmemberinvoker.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/reflection/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/reflection/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/reflection/propertyhelper.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/reflection/propertyhelper.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/reflection/typecache.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/reflection/typecache.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/scoping/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/scoping/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/validation/deferring-validation.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/validation/deferring-validation.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/validation/getting-summary-of-validation-results.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/validation/getting-summary-of-validation-results.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/validation/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/validation/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/validation/using-validation-context.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/validation/using-validation-context.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/validation/validation-via-data-annotations.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/validation/validation-via-data-annotations.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/validation/validation-via-ivalidator.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/validation/validation-via-ivalidator.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/validation/validation-via-special-model-validators.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/validation/validation-via-special-model-validators.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-core/validation/validation-via-validate-method.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-core/validation/validation-via-validate-method.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-fody/configuration.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-fody/configuration.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-fody/exposing-properties.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-fody/exposing-properties.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-fody/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-fody/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-fody/weaving-arguments.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-fody/weaving-arguments.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-fody/weaving-properties.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-fody/weaving-properties.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/auditing/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/auditing/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/authentication.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/authentication.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/autocompletion.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/autocompletion.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/autoscroll.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/autoscroll.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/delay-binding-update.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/delay-binding-update.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/double-click-to-command.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/double-click-to-command.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/event-to-command/event-args-converter.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/event-to-command/event-args-converter.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/event-to-command/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/event-to-command/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/focus-first-control.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/focus-first-control.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/focus-on-key-press.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/focus-on-key-press.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/focus.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/focus.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/hide-until-view-model-loaded.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/hide-until-view-model-loaded.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/key-press-to-command.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/key-press-to-command.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/mouse-info.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/mouse-info.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/navigate.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/navigate.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/numeric-textbox.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/numeric-textbox.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/select-text-on-focus.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/select-text-on-focus.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/update-binding-on-password-changed.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/update-binding-on-password-changed.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/behaviors-triggers/update-binding-on-text-changed.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/behaviors-triggers/update-binding-on-text-changed.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/bindings/command-bindings.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/bindings/command-bindings.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/bindings/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/bindings/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/bindings/property-bindings.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/bindings/property-bindings.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/commands-events/application-wide-commands.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/commands-events/application-wide-commands.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/commands-events/authentication.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/commands-events/authentication.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/commands-events/commands.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/commands-events/commands.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/commands-events/hooking-command-to-validation.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/commands-events/hooking-command-to-validation.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/commands-events/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/commands-events/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/converters/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/converters/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/designers/design-time-view-models.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/designers/design-time-view-models.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/designers/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/designers/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/designers/running-code-at-design-time.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/designers/running-code-at-design-time.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/locators-naming-conventions/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/locators-naming-conventions/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/locators-naming-conventions/naming-conventions.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/locators-naming-conventions/naming-conventions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/locators-naming-conventions/url-locator.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/locators-naming-conventions/url-locator.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/locators-naming-conventions/view-locator.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/locators-naming-conventions/view-locator.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/locators-naming-conventions/view-model-locator.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/locators-naming-conventions/view-model-locator.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/location-service.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/location-service.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/message-service.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/message-service.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/navigation-service.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/navigation-service.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/open-file-service.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/open-file-service.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/please-wait-service.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/please-wait-service.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/process-service.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/process-service.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/save-file-service.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/save-file-service.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/scheduler-service.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/scheduler-service.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/select-directory-service.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/select-directory-service.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/ui-visualizer-service.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/ui-visualizer-service.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/vibrate-service.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/vibrate-service.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/services/view-export-service.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/services/view-export-service.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/view-models/advanced/controlling-instantiation-of-view-models.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/view-models/advanced/controlling-instantiation-of-view-models.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/view-models/advanced/exposing-properties-of-model-automatically.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/view-models/advanced/exposing-properties-of-model-automatically.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/view-models/advanced/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/view-models/advanced/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/view-models/advanced/keeping-view-models-alive.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/view-models/advanced/keeping-view-models-alive.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/view-models/creating-basic-view-model.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/view-models/creating-basic-view-model.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/view-models/creating-view-model-with-model-and-mappings.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/view-models/creating-view-model-with-model-and-mappings.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/view-models/creating-view-model-with-model.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/view-models/creating-view-model-with-model.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/view-models/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/view-models/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/view-models/mapping-properties-from-view-to-view-model.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/view-models/mapping-properties-from-view-to-view-model.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/view-models/nested-view-models.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/view-models/nested-view-models.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/view-models/validation-in-view-models.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/view-models/validation-in-view-models.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/advanced/datawindow-under-the-hood.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/advanced/datawindow-under-the-hood.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/advanced/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/advanced/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/customizing-datacontext-subscription-behavior.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/customizing-datacontext-subscription-behavior.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/external-controls/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/external-controls/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/external-controls/using-custom-control.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/external-controls/using-custom-control.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/external-controls/using-custom-window.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/external-controls/using-custom-window.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/improving-performance-by-defining-view-model-grid-manually.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/improving-performance-by-defining-view-model-grid-manually.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/usercontrol-resources.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/usercontrol-resources.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/usercontrol.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/usercontrol.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/validation-controls.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/validation-controls.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-mvvm/views/xaml/window-and-datawindow.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-mvvm/views/xaml/window-and-datawindow.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-sourcegenerators/debugging.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-sourcegenerators/debugging.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-sourcegenerators/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-sourcegenerators/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-sourcegenerators/injected-services-and-models.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-sourcegenerators/injected-services-and-models.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/catel-sourcegenerators/xaml-constructors.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/catel-sourcegenerators/xaml-constructors.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/downloads/getting-started/wpf/wpf-getting-started.zip",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/downloads/getting-started/wpf/wpf-getting-started.zip"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/downloads/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.rar",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/downloads/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.rar"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/examples/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/examples/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/faq/general.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/faq/general.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/faq/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/faq/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/faq/mvvm.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/faq/mvvm.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/faq/performance-considerations.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/faq/performance-considerations.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/faq/problem-solving.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/faq/problem-solving.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/getting-started/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/getting-started/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/getting-started/quick-introduction-for-developers/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/getting-started/quick-introduction-for-developers/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/getting-started/wpf/creating-the-models.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/getting-started/wpf/creating-the-models.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/getting-started/wpf/creating-the-project.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/getting-started/wpf/creating-the-project.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/getting-started/wpf/creating-the-user-controls.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/getting-started/wpf/creating-the-user-controls.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/getting-started/wpf/creating-the-view-models.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/getting-started/wpf/creating-the-view-models.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/getting-started/wpf/creating-the-windows.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/getting-started/wpf/creating-the-windows.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/getting-started/wpf/finalizing-the-application.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/getting-started/wpf/finalizing-the-application.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/getting-started/wpf/hooking-up-everything-together.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/getting-started/wpf/hooking-up-everything-together.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/getting-started/wpf/hosting-model.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/getting-started/wpf/hosting-model.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/getting-started/wpf/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/getting-started/wpf/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/getting-started/wpf/serializing-data-from-to-disk.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/getting-started/wpf/serializing-data-from-to-disk.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/apicop/introduction/architecture.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/apicop/introduction/architecture.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/data-handling/property-bags/benchmarks.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/data-handling/property-bags/benchmarks.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/ioc/introduction-to-components/dependencyresolver/flow.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/ioc/introduction-to-components/dependencyresolver/flow.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/ioc/introduction-to-components/ensuring-integrity/flow.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/ioc/introduction-to-components/ensuring-integrity/flow.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/ioc/introduction-to-components/ensuring-integrity/quickwatch.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/ioc/introduction-to-components/ensuring-integrity/quickwatch.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/ioc/introduction-to-components/ensuring-integrity/stackoverflow.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/ioc/introduction-to-components/ensuring-integrity/stackoverflow.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/ioc/introduction-to-components/ensuring-integrity/typerequestpath.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/ioc/introduction-to-components/ensuring-integrity/typerequestpath.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/logging/log-listeners/console-log-listener/console.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/logging/log-listeners/console-log-listener/console.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/logging/log-listeners/event-log-listener/eventlog.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/logging/log-listeners/event-log-listener/eventlog.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/logging/log-listeners/seq-log-listener/seq.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/logging/log-listeners/seq-log-listener/seq.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/pooling/hasobjects.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/pooling/hasobjects.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/pooling/reachedmaxsize.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/pooling/reachedmaxsize.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/serialization/customizing-serialization/introduction/architecture.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/serialization/customizing-serialization/introduction/architecture.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-core/serialization/customizing-serialization/introduction/workflow.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-core/serialization/customizing-serialization/introduction/workflow.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/behaviors-triggers/authentication/administrator.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/behaviors-triggers/authentication/administrator.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/behaviors-triggers/authentication/readonly.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/behaviors-triggers/authentication/readonly.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/behaviors-triggers/autocompletion/example.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/behaviors-triggers/autocompletion/example.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/bindings/introduction/architecture.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/bindings/introduction/architecture.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/designers/design-time-view-models/wpf.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/designers/design-time-view-models/wpf.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/services/ui-visualizer-service/example.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/services/ui-visualizer-service/example.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/datacontextchanged.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/datacontextchanged.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/determinedatacontext.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/determinedatacontext.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/hierarchy.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/hierarchy.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/loaded.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/loaded.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/mainflow.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/mainflow.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/overview.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/overview.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/unloaded.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/unloaded.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/views/xaml/usercontrol-resources/example.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/views/xaml/usercontrol-resources/example.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/views/xaml/usercontrol/example.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/views/xaml/usercontrol/example.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/views/xaml/usercontrol/hierarchy.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/views/xaml/usercontrol/hierarchy.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/catel-mvvm/views/xaml/validation-controls/infobarmessagecontrol.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/catel-mvvm/views/xaml/validation-controls/infobarmessagecontrol.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/favicon.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/favicon.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/getting-started/wpf/creating-the-project/example.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/getting-started/wpf/creating-the-project/example.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/getting-started/wpf/creating-the-project/nuget.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/getting-started/wpf/creating-the-project/nuget.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/getting-started/wpf/creating-the-project/projecttemplate.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/getting-started/wpf/creating-the-project/projecttemplate.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/getting-started/wpf/creating-the-project/solutionexplorer.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/getting-started/wpf/creating-the-project/solutionexplorer.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/getting-started/wpf/creating-the-user-controls/itemtemplate.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/getting-started/wpf/creating-the-user-controls/itemtemplate.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/getting-started/wpf/creating-the-windows/itemtemplate.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/getting-started/wpf/creating-the-windows/itemtemplate.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/getting-started/wpf/introduction/screenshot.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/getting-started/wpf/introduction/screenshot.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/getting-started/wpf/introduction/wpf-getting-started.zip",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/getting-started/wpf/introduction/wpf-getting-started.zip"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/getting-started/wpf/serializing-data-from-to-disk/solutionexplorer.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/getting-started/wpf/serializing-data-from-to-disk/solutionexplorer.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/icons/bullet_blue.gif",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/icons/bullet_blue.gif"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/icons/contenttypes/home_page_16.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/icons/contenttypes/home_page_16.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/introduction/mvvm/creating-view-models-with-catel/classdiagram.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/introduction/mvvm/creating-view-models-with-catel/classdiagram.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/introduction/mvvm/different-interpretations-of-mvvm/overview.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/introduction/mvvm/different-interpretations-of-mvvm/overview.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/introduction/mvvm/introduction-to-nested-user-controls-problem/example.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/introduction/mvvm/introduction-to-nested-user-controls-problem/example.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/introduction/mvvm/introduction-to-nested-user-controls-problem/hierarchy.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/introduction/mvvm/introduction-to-nested-user-controls-problem/hierarchy.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/introduction/mvvm/introduction-to-nested-user-controls-problem/overview.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/introduction/mvvm/introduction-to-nested-user-controls-problem/overview.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/introduction/mvvm/introduction-to-nested-user-controls-problem/validation.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/introduction/mvvm/introduction-to-nested-user-controls-problem/validation.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/setup-deployment/code-snippets-templates/using-the-item-templates/usercontrol.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/setup-deployment/code-snippets-templates/using-the-item-templates/usercontrol.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/setup-deployment/code-snippets-templates/using-the-item-templates/window.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/setup-deployment/code-snippets-templates/using-the-item-templates/window.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/setup-deployment/code-snippets-templates/using-the-project-templates/wpf.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/setup-deployment/code-snippets-templates/using-the-project-templates/wpf.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/setup-deployment/getting-prerelease-versions-via-nuget/nuget.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/setup-deployment/getting-prerelease-versions-via-nuget/nuget.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/setup-deployment/stepping-through-the-code/visualstudioconfiguration.png",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/setup-deployment/stepping-through-the-code/visualstudioconfiguration.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "7.x/images/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.gif",
+      "output": {
+        "resource": {
+          "relative_path": "7.x/images/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.gif"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/introduction/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/introduction/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/introduction/introduction-data-objects/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/introduction/introduction-data-objects/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/introduction/mvvm/creating-view-models-with-catel.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/introduction/mvvm/creating-view-models-with-catel.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/introduction/mvvm/different-interpretations-of-mvvm.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/introduction/mvvm/different-interpretations-of-mvvm.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/introduction/mvvm/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/introduction/mvvm/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/introduction/mvvm/introduction-to-mvvm-and-models.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/introduction/mvvm/introduction-to-mvvm-and-models.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/introduction/mvvm/introduction-to-nested-user-controls-problem.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/introduction/mvvm/introduction-to-nested-user-controls-problem.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/introduction/mvvm/introduction-to-services.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/introduction/mvvm/introduction-to-services.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/introduction/mvvm/validation-in-model-or-view-model.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/introduction/mvvm/validation-in-model-or-view-model.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/introduction/why-catel/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/introduction/why-catel/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/setup-deployment/code-snippets-templates/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/setup-deployment/code-snippets-templates/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/setup-deployment/code-snippets-templates/using-the-code-snippets.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/setup-deployment/code-snippets-templates/using-the-code-snippets.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/setup-deployment/code-snippets-templates/using-the-item-templates.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/setup-deployment/code-snippets-templates/using-the-item-templates.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/setup-deployment/code-snippets-templates/using-the-project-templates.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/setup-deployment/code-snippets-templates/using-the-project-templates.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/setup-deployment/compiling-from-source/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/setup-deployment/compiling-from-source/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/setup-deployment/getting-prerelease-versions-via-nuget/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/setup-deployment/getting-prerelease-versions-via-nuget/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/setup-deployment/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/setup-deployment/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/setup-deployment/stepping-through-the-code/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/setup-deployment/stepping-through-the-code/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/setup-deployment/update-guides/catel-6.0.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/setup-deployment/update-guides/catel-6.0.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/setup-deployment/update-guides/catel-7.0.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/setup-deployment/update-guides/catel-7.0.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/setup-deployment/update-guides/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/setup-deployment/update-guides/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/tips-tricks/core/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/tips-tricks/core/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/tips-tricks/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/tips-tricks/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/tips-tricks/mvvm/finding-view-of-view-model.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/tips-tricks/mvvm/finding-view-of-view-model.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/tips-tricks/mvvm/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/tips-tricks/mvvm/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/tips-tricks/mvvm/requery-commands-automatically.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/tips-tricks/mvvm/requery-commands-automatically.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/tips-tricks/mvvm/using-compiled-bindings.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/tips-tricks/mvvm/using-compiled-bindings.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "7.x/tips-tricks/mvvm/using-tabbed-interface-with-mvvm.md",
+      "output": {
+        ".html": {
+          "relative_path": "7.x/tips-tricks/mvvm/using-tabbed-interface-with-mvvm.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "7.x/toc.yml",
+      "output": {
+        ".json": {
+          "relative_path": "7.x/toc.json"
+        },
+        ".html": {
+          "relative_path": "7.x/toc.html"
+        }
+      },
+      "version": ""
+    },
+    {
       "type": "Resource",
       "source_relative_path": "images/favicon.png",
       "output": {
@@ -2805,2329 +5128,6 @@
         },
         ".html": {
           "relative_path": "toc.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/argument-checking/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/argument-checking/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/caching/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/caching/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/configuration/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/configuration/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/data-handling/advanced-property-change-notifications.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/data-handling/advanced-property-change-notifications.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/data-handling/childawaremodelbase.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/data-handling/childawaremodelbase.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/data-handling/comparablemodelbase.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/data-handling/comparablemodelbase.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/data-handling/dispatcherobservableobject.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/data-handling/dispatcherobservableobject.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/data-handling/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/data-handling/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/data-handling/modelbase.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/data-handling/modelbase.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/data-handling/observableobject.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/data-handling/observableobject.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/data-handling/property-bags.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/data-handling/property-bags.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/data-handling/savablemodelbase.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/data-handling/savablemodelbase.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/data-handling/using-modelbase-as-base-for-entities.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/data-handling/using-modelbase-as-base-for-entities.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/data-handling/validatablemodelbase.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/data-handling/validatablemodelbase.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/exception-handling/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/exception-handling/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/exception-handling/wpf-implementation-for-exception-handling.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/exception-handling/wpf-implementation-for-exception-handling.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/messaging/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/messaging/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/messaging/message-mediator.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/messaging/message-mediator.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/messaging/messagebase.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/messaging/messagebase.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/messaging/messaging-via-attributes.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/messaging/messaging-via-attributes.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/multilingual/displayattribute.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/multilingual/displayattribute.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/multilingual/displaynameattribute.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/multilingual/displaynameattribute.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/multilingual/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/multilingual/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/parallel-invocation-tasks/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/parallel-invocation-tasks/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/parallel-invocation-tasks/thread-safe-code.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/parallel-invocation-tasks/thread-safe-code.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/preventing-memory-leaks/change-notification-wrapper.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/preventing-memory-leaks/change-notification-wrapper.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/preventing-memory-leaks/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/preventing-memory-leaks/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/preventing-memory-leaks/weak-events.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/preventing-memory-leaks/weak-events.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/reflection/fastmemberinvoker.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/reflection/fastmemberinvoker.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/reflection/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/reflection/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/reflection/propertyhelper.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/reflection/propertyhelper.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/reflection/typecache.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/reflection/typecache.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/scoping/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/scoping/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/validation/deferring-validation.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/validation/deferring-validation.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/validation/getting-summary-of-validation-results.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/validation/getting-summary-of-validation-results.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/validation/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/validation/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/validation/using-validation-context.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/validation/using-validation-context.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/validation/validation-via-data-annotations.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/validation/validation-via-data-annotations.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/validation/validation-via-ivalidator.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/validation/validation-via-ivalidator.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/validation/validation-via-special-model-validators.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/validation/validation-via-special-model-validators.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-core/validation/validation-via-validate-method.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-core/validation/validation-via-validate-method.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-fody/configuration.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-fody/configuration.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-fody/exposing-properties.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-fody/exposing-properties.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-fody/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-fody/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-fody/weaving-arguments.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-fody/weaving-arguments.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-fody/weaving-properties.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-fody/weaving-properties.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/auditing/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/auditing/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/authentication.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/authentication.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/autocompletion.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/autocompletion.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/autoscroll.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/autoscroll.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/delay-binding-update.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/delay-binding-update.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/double-click-to-command.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/double-click-to-command.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/event-to-command/event-args-converter.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/event-to-command/event-args-converter.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/event-to-command/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/event-to-command/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/focus-first-control.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/focus-first-control.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/focus-on-key-press.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/focus-on-key-press.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/focus.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/focus.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/hide-until-view-model-loaded.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/hide-until-view-model-loaded.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/key-press-to-command.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/key-press-to-command.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/mouse-info.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/mouse-info.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/navigate.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/navigate.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/numeric-textbox.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/numeric-textbox.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/select-text-on-focus.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/select-text-on-focus.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/update-binding-on-password-changed.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/update-binding-on-password-changed.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/behaviors-triggers/update-binding-on-text-changed.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/behaviors-triggers/update-binding-on-text-changed.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/bindings/command-bindings.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/bindings/command-bindings.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/bindings/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/bindings/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/bindings/property-bindings.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/bindings/property-bindings.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/commands-events/application-wide-commands.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/commands-events/application-wide-commands.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/commands-events/authentication.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/commands-events/authentication.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/commands-events/commands.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/commands-events/commands.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/commands-events/hooking-command-to-validation.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/commands-events/hooking-command-to-validation.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/commands-events/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/commands-events/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/converters/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/converters/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/designers/design-time-view-models.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/designers/design-time-view-models.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/designers/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/designers/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/designers/running-code-at-design-time.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/designers/running-code-at-design-time.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/locators-naming-conventions/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/locators-naming-conventions/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/locators-naming-conventions/naming-conventions.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/locators-naming-conventions/naming-conventions.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/locators-naming-conventions/url-locator.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/locators-naming-conventions/url-locator.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/locators-naming-conventions/view-locator.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/locators-naming-conventions/view-locator.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/locators-naming-conventions/view-model-locator.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/locators-naming-conventions/view-model-locator.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/location-service.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/location-service.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/message-service.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/message-service.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/navigation-service.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/navigation-service.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/open-file-service.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/open-file-service.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/please-wait-service.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/please-wait-service.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/process-service.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/process-service.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/save-file-service.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/save-file-service.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/scheduler-service.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/scheduler-service.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/select-directory-service.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/select-directory-service.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/ui-visualizer-service.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/ui-visualizer-service.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/vibrate-service.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/vibrate-service.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/services/view-export-service.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/services/view-export-service.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/view-models/advanced/controlling-instantiation-of-view-models.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/view-models/advanced/controlling-instantiation-of-view-models.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/view-models/advanced/exposing-properties-of-model-automatically.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/view-models/advanced/exposing-properties-of-model-automatically.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/view-models/advanced/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/view-models/advanced/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/view-models/advanced/keeping-view-models-alive.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/view-models/advanced/keeping-view-models-alive.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/view-models/creating-basic-view-model.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/view-models/creating-basic-view-model.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/view-models/creating-view-model-with-model-and-mappings.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/view-models/creating-view-model-with-model-and-mappings.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/view-models/creating-view-model-with-model.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/view-models/creating-view-model-with-model.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/view-models/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/view-models/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/view-models/mapping-properties-from-view-to-view-model.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/view-models/mapping-properties-from-view-to-view-model.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/view-models/nested-view-models.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/view-models/nested-view-models.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/view-models/validation-in-view-models.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/view-models/validation-in-view-models.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/advanced/datawindow-under-the-hood.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/advanced/datawindow-under-the-hood.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/advanced/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/advanced/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/customizing-datacontext-subscription-behavior.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/customizing-datacontext-subscription-behavior.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/external-controls/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/external-controls/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/external-controls/using-custom-control.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/external-controls/using-custom-control.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/external-controls/using-custom-window.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/external-controls/using-custom-window.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/improving-performance-by-defining-view-model-grid-manually.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/improving-performance-by-defining-view-model-grid-manually.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/usercontrol-resources.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/usercontrol-resources.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/usercontrol.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/usercontrol.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/validation-controls.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/validation-controls.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-mvvm/views/xaml/window-and-datawindow.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-mvvm/views/xaml/window-and-datawindow.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-sourcegenerators/debugging.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-sourcegenerators/debugging.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-sourcegenerators/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-sourcegenerators/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-sourcegenerators/injected-services-and-models.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-sourcegenerators/injected-services-and-models.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/catel-sourcegenerators/xaml-constructors.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/catel-sourcegenerators/xaml-constructors.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/downloads/getting-started/wpf/wpf-getting-started.zip",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/downloads/getting-started/wpf/wpf-getting-started.zip"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/downloads/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.rar",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/downloads/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.rar"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/examples/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/examples/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/faq/general.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/faq/general.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/faq/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/faq/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/faq/mvvm.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/faq/mvvm.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/faq/performance-considerations.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/faq/performance-considerations.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/faq/problem-solving.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/faq/problem-solving.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/getting-started/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/getting-started/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/getting-started/quick-introduction-for-developers/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/getting-started/quick-introduction-for-developers/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/getting-started/wpf/creating-the-models.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/getting-started/wpf/creating-the-models.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/getting-started/wpf/creating-the-project.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/getting-started/wpf/creating-the-project.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/getting-started/wpf/creating-the-user-controls.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/getting-started/wpf/creating-the-user-controls.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/getting-started/wpf/creating-the-view-models.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/getting-started/wpf/creating-the-view-models.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/getting-started/wpf/creating-the-windows.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/getting-started/wpf/creating-the-windows.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/getting-started/wpf/finalizing-the-application.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/getting-started/wpf/finalizing-the-application.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/getting-started/wpf/hooking-up-everything-together.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/getting-started/wpf/hooking-up-everything-together.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/getting-started/wpf/hosting-model.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/getting-started/wpf/hosting-model.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/getting-started/wpf/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/getting-started/wpf/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/getting-started/wpf/serializing-data-from-to-disk.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/getting-started/wpf/serializing-data-from-to-disk.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/apicop/introduction/architecture.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/apicop/introduction/architecture.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/data-handling/property-bags/benchmarks.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/data-handling/property-bags/benchmarks.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/ioc/introduction-to-components/dependencyresolver/flow.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/ioc/introduction-to-components/dependencyresolver/flow.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/ioc/introduction-to-components/ensuring-integrity/flow.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/ioc/introduction-to-components/ensuring-integrity/flow.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/ioc/introduction-to-components/ensuring-integrity/quickwatch.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/ioc/introduction-to-components/ensuring-integrity/quickwatch.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/ioc/introduction-to-components/ensuring-integrity/stackoverflow.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/ioc/introduction-to-components/ensuring-integrity/stackoverflow.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/ioc/introduction-to-components/ensuring-integrity/typerequestpath.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/ioc/introduction-to-components/ensuring-integrity/typerequestpath.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/logging/log-listeners/console-log-listener/console.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/logging/log-listeners/console-log-listener/console.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/logging/log-listeners/event-log-listener/eventlog.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/logging/log-listeners/event-log-listener/eventlog.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/logging/log-listeners/seq-log-listener/seq.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/logging/log-listeners/seq-log-listener/seq.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/pooling/hasobjects.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/pooling/hasobjects.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/pooling/reachedmaxsize.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/pooling/reachedmaxsize.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/serialization/customizing-serialization/introduction/architecture.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/serialization/customizing-serialization/introduction/architecture.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-core/serialization/customizing-serialization/introduction/workflow.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-core/serialization/customizing-serialization/introduction/workflow.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/behaviors-triggers/authentication/administrator.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/behaviors-triggers/authentication/administrator.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/behaviors-triggers/authentication/readonly.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/behaviors-triggers/authentication/readonly.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/behaviors-triggers/autocompletion/example.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/behaviors-triggers/autocompletion/example.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/bindings/introduction/architecture.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/bindings/introduction/architecture.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/designers/design-time-view-models/wpf.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/designers/design-time-view-models/wpf.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/services/ui-visualizer-service/example.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/services/ui-visualizer-service/example.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/datacontextchanged.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/datacontextchanged.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/determinedatacontext.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/determinedatacontext.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/hierarchy.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/hierarchy.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/loaded.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/loaded.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/mainflow.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/mainflow.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/overview.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/overview.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/unloaded.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/views/xaml/advanced/usercontrol-under-the-hood/unloaded.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/views/xaml/usercontrol-resources/example.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/views/xaml/usercontrol-resources/example.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/views/xaml/usercontrol/example.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/views/xaml/usercontrol/example.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/views/xaml/usercontrol/hierarchy.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/views/xaml/usercontrol/hierarchy.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/catel-mvvm/views/xaml/validation-controls/infobarmessagecontrol.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/catel-mvvm/views/xaml/validation-controls/infobarmessagecontrol.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/favicon.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/favicon.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/getting-started/wpf/creating-the-project/example.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/getting-started/wpf/creating-the-project/example.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/getting-started/wpf/creating-the-project/nuget.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/getting-started/wpf/creating-the-project/nuget.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/getting-started/wpf/creating-the-project/projecttemplate.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/getting-started/wpf/creating-the-project/projecttemplate.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/getting-started/wpf/creating-the-project/solutionexplorer.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/getting-started/wpf/creating-the-project/solutionexplorer.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/getting-started/wpf/creating-the-user-controls/itemtemplate.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/getting-started/wpf/creating-the-user-controls/itemtemplate.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/getting-started/wpf/creating-the-windows/itemtemplate.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/getting-started/wpf/creating-the-windows/itemtemplate.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/getting-started/wpf/introduction/screenshot.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/getting-started/wpf/introduction/screenshot.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/getting-started/wpf/introduction/wpf-getting-started.zip",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/getting-started/wpf/introduction/wpf-getting-started.zip"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/getting-started/wpf/serializing-data-from-to-disk/solutionexplorer.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/getting-started/wpf/serializing-data-from-to-disk/solutionexplorer.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/icons/bullet_blue.gif",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/icons/bullet_blue.gif"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/icons/contenttypes/home_page_16.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/icons/contenttypes/home_page_16.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/introduction/mvvm/creating-view-models-with-catel/classdiagram.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/introduction/mvvm/creating-view-models-with-catel/classdiagram.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/introduction/mvvm/different-interpretations-of-mvvm/overview.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/introduction/mvvm/different-interpretations-of-mvvm/overview.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/introduction/mvvm/introduction-to-nested-user-controls-problem/example.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/introduction/mvvm/introduction-to-nested-user-controls-problem/example.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/introduction/mvvm/introduction-to-nested-user-controls-problem/hierarchy.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/introduction/mvvm/introduction-to-nested-user-controls-problem/hierarchy.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/introduction/mvvm/introduction-to-nested-user-controls-problem/overview.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/introduction/mvvm/introduction-to-nested-user-controls-problem/overview.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/introduction/mvvm/introduction-to-nested-user-controls-problem/validation.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/introduction/mvvm/introduction-to-nested-user-controls-problem/validation.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/setup-deployment/code-snippets-templates/using-the-item-templates/usercontrol.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/setup-deployment/code-snippets-templates/using-the-item-templates/usercontrol.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/setup-deployment/code-snippets-templates/using-the-item-templates/window.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/setup-deployment/code-snippets-templates/using-the-item-templates/window.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/setup-deployment/code-snippets-templates/using-the-project-templates/wpf.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/setup-deployment/code-snippets-templates/using-the-project-templates/wpf.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/setup-deployment/getting-prerelease-versions-via-nuget/nuget.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/setup-deployment/getting-prerelease-versions-via-nuget/nuget.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/setup-deployment/stepping-through-the-code/visualstudioconfiguration.png",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/setup-deployment/stepping-through-the-code/visualstudioconfiguration.png"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Resource",
-      "source_relative_path": "vnext/images/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.gif",
-      "output": {
-        "resource": {
-          "relative_path": "vnext/images/tips-tricks/mvvm/using-tabbed-interface-with-mvvm/example.gif"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/introduction-data-objects/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/introduction-data-objects/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/mvvm/creating-view-models-with-catel.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/mvvm/creating-view-models-with-catel.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/mvvm/different-interpretations-of-mvvm.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/mvvm/different-interpretations-of-mvvm.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/mvvm/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/mvvm/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/mvvm/introduction-to-mvvm-and-models.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/mvvm/introduction-to-mvvm-and-models.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/mvvm/introduction-to-nested-user-controls-problem.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/mvvm/introduction-to-nested-user-controls-problem.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/mvvm/introduction-to-services.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/mvvm/introduction-to-services.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/mvvm/validation-in-model-or-view-model.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/mvvm/validation-in-model-or-view-model.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/introduction/why-catel/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/introduction/why-catel/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/code-snippets-templates/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/code-snippets-templates/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/code-snippets-templates/using-the-code-snippets.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/code-snippets-templates/using-the-code-snippets.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/code-snippets-templates/using-the-item-templates.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/code-snippets-templates/using-the-item-templates.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/code-snippets-templates/using-the-project-templates.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/code-snippets-templates/using-the-project-templates.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/compiling-from-source/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/compiling-from-source/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/getting-prerelease-versions-via-nuget/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/getting-prerelease-versions-via-nuget/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/stepping-through-the-code/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/stepping-through-the-code/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/update-guides/catel-6.0.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/update-guides/catel-6.0.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/update-guides/catel-7.0.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/update-guides/catel-7.0.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/setup-deployment/update-guides/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/setup-deployment/update-guides/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/tips-tricks/core/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/tips-tricks/core/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/tips-tricks/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/tips-tricks/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/tips-tricks/mvvm/finding-view-of-view-model.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/tips-tricks/mvvm/finding-view-of-view-model.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/tips-tricks/mvvm/index.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/tips-tricks/mvvm/index.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/tips-tricks/mvvm/requery-commands-automatically.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/tips-tricks/mvvm/requery-commands-automatically.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/tips-tricks/mvvm/using-compiled-bindings.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/tips-tricks/mvvm/using-compiled-bindings.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Conceptual",
-      "source_relative_path": "vnext/tips-tricks/mvvm/using-tabbed-interface-with-mvvm.md",
-      "output": {
-        ".html": {
-          "relative_path": "vnext/tips-tricks/mvvm/using-tabbed-interface-with-mvvm.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "Toc",
-      "source_relative_path": "vnext/toc.yml",
-      "output": {
-        ".json": {
-          "relative_path": "vnext/toc.json"
-        },
-        ".html": {
-          "relative_path": "vnext/toc.html"
         }
       },
       "version": ""

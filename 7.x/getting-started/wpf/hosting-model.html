@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Hosting model | Catel Documentation </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Hosting model | Catel Documentation ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/getting-started/wpf/hosting-model.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="">
+            
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+
+
+<p>Catel supports the .NET (core) hosted application model, similar to ASP.NET Core. This model provides a standardized way to configure services, logging, and application lifetime management using <code>Microsoft.Extensions.Hosting</code>.</p>
+<h2 id="why-use-the-hosted-model">Why use the hosted model?</h2>
+<p>The hosted model gives you a familiar, structured startup experience:</p>
+<ul>
+<li><strong>Dependency injection</strong> is configured in one place using <code>IServiceCollection</code>.</li>
+<li><strong>Logging</strong> integrates naturally with <code>Microsoft.Extensions.Logging</code>.</li>
+<li><strong>Application lifetime</strong> is managed through <code>IHost</code>, including clean startup and shutdown.</li>
+</ul>
+<h2 id="required-nuget-packages">Required NuGet packages</h2>
+<p>Add the following packages to your WPF project:</p>
+<pre><code class="lang-xml">&lt;PackageReference Include=&quot;Catel.Core&quot; Version=&quot;7.0.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Catel.MVVM&quot; Version=&quot;7.0.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Microsoft.Extensions.Hosting&quot; Version=&quot;10.0.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Microsoft.Extensions.Logging.Console&quot; Version=&quot;10.0.0&quot; /&gt;
+&lt;PackageReference Include=&quot;Microsoft.Extensions.Logging.Debug&quot; Version=&quot;10.0.0&quot; /&gt;
+</code></pre>
+<h2 id="setting-up-the-application">Setting up the application</h2>
+<h3 id="removing-the-default-startup-uri">Removing the default startup URI</h3>
+<p>By default, a WPF project uses <code>StartupUri</code> in <code>App.xaml</code> to open the main window. When using the hosted model, remove this attribute so that the application lifecycle is managed manually:</p>
+<pre><code class="lang-xml">&lt;Application x:Class=&quot;MyApp.App&quot;
+             xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+             xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;&gt;
+    &lt;Application.Resources&gt;
+    &lt;/Application.Resources&gt;
+&lt;/Application&gt;
+</code></pre>
+<h3 id="configuring-appxamlcs">Configuring App.xaml.cs</h3>
+<p>Replace the code-behind of <code>App.xaml.cs</code> with the following:</p>
+<pre><code class="lang-csharp">namespace MyApp;
+
+using System.Windows;
+using Catel.IoC;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+public partial class App
+{
+    // The host is disposed in OnExit via a using block, which covers its lifetime.
+    // The IDISP006 warning is suppressed because WPF's Application class does not
+    // implement IDisposable, so IDisposable cannot be forwarded through the class hierarchy.
+#pragma warning disable IDISP006 // Implement IDisposable
+    private readonly IHost _host;
+#pragma warning restore IDISP006 // Implement IDisposable
+
+    public App()
+    {
+        var hostBuilder = new HostBuilder()
+            .ConfigureServices((hostContext, services) =&gt;
+            {
+                services.AddCatelCore();
+                services.AddCatelMvvm();
+
+                services.AddLogging(x =&gt;
+                {
+                    x.AddConsole();
+                    x.AddDebug();
+                });
+            });
+
+        _host = hostBuilder.Build();
+
+        IoCContainer.ServiceProvider = _host.Services;
+    }
+
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        base.OnStartup(e);
+
+        var serviceProvider = _host.Services;
+
+        // Resolves and (optionally) initializes every singleton that implements
+        // IConstructAtStartup, ensuring they are ready before the UI is shown.
+        serviceProvider.CreateTypesThatMustBeConstructedAtStartup();
+
+        var mainWindow = ActivatorUtilities.CreateInstance&lt;MainWindow&gt;(serviceProvider);
+        mainWindow.Show();
+    }
+
+    // OnExit is a WPF lifecycle override that must be async void because the base
+    // method signature is void. Exceptions thrown inside the async continuation will
+    // be unhandled, so ensure that _host.StopAsync() does not throw, or wrap it in
+    // a try/catch if graceful-shutdown errors need to be handled.
+    protected override async void OnExit(ExitEventArgs e)
+    {
+        using (_host)
+        {
+            await _host.StopAsync();
+        }
+
+        base.OnExit(e);
+    }
+}
+</code></pre>
+<h3 id="what-each-part-does">What each part does</h3>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HostBuilder</code></td>
+<td>Creates the application host and configures services.</td>
+</tr>
+<tr>
+<td><code>AddCatelCore()</code></td>
+<td>Registers Catel core services in the DI container.</td>
+</tr>
+<tr>
+<td><code>AddCatelMvvm()</code></td>
+<td>Registers Catel MVVM services in the DI container.</td>
+</tr>
+<tr>
+<td><code>AddLogging(...)</code></td>
+<td>Configures logging providers (console, debug).</td>
+</tr>
+<tr>
+<td><code>IoCContainer.ServiceProvider</code></td>
+<td>Makes the built <code>IServiceProvider</code> available to Catel's IoC container and source-generated constructors.</td>
+</tr>
+<tr>
+<td><code>CreateTypesThatMustBeConstructedAtStartup()</code></td>
+<td>Iterates all registered singleton services and immediately resolves any that implement <code>IConstructAtStartup</code>, so they are fully initialised before the UI is shown. If a service also implements <code>IInitializeAtStartup</code>, its <code>Initialize()</code> method is called at this point.</td>
+</tr>
+<tr>
+<td><code>ActivatorUtilities.CreateInstance</code></td>
+<td>Creates the main window by resolving its dependencies from the service provider.</td>
+</tr>
+<tr>
+<td><code>OnExit</code></td>
+<td>Gracefully stops the host and disposes resources on application exit.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="registering-additional-services">Registering additional services</h2>
+<p>Register your own services inside <code>ConfigureServices</code> before calling <code>hostBuilder.Build()</code>:</p>
+<pre><code class="lang-csharp">.ConfigureServices((hostContext, services) =&gt;
+{
+    services.AddCatelCore();
+    services.AddCatelMvvm();
+
+    // Register application services
+    services.AddSingleton&lt;IMyDataService, MyDataService&gt;();
+    services.AddTransient&lt;IMyOtherService, MyOtherService&gt;();
+
+    services.AddLogging(x =&gt;
+    {
+        x.AddConsole();
+        x.AddDebug();
+    });
+})
+</code></pre>
+<h2 id="full-example">Full example</h2>
+<p>A complete, working example of this setup is available in the <a href="https://github.com/Catel/Catel.Examples/blob/master/src/Catel.Examples.WPF.PersonApplication/App.xaml.cs">Catel Examples repository</a>.</p>
+
+</article>
+
+        <div class="contribution d-print-none">
+          <a href="https://github.com/catel/catel/blob/develop/doc/docfx/7.x/getting-started/wpf/hosting-model.md/#L1" class="edit-link">Edit this page</a>
+        </div>
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          Catel is an application development platform with the focus on MVVM.
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
