@@ -3,6 +3,6 @@
 - name: 6.x
   href: 6.x/
   topicHref: 6.x/index.md
-- name: vNext (7.x)
+- name: 7.x (latest)
   href: vnext/
   topicHref: vnext/index.md

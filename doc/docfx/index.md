@@ -15,5 +15,5 @@ NuGet unstable version|![Pre-release version](https://img.shields.io/nuget/vpre/
 
 Please pick a version:
 
-- [Catel vNext (7.x)](vnext/index.md)
+- [Catel 7.x (latest)](vnext/index.md)
 - [Catel 6.x](6.x/index.md)
