@@ -10,9 +10,11 @@ Use these attributes:
 - `[InjectedService]` to inject services into generated constructors.
 - `[InjectedModel]` to inject a model into view models.
 
-## Views, markup extensions, and behaviors
+## Views, markup extensions, value converters, and behaviors
 
 For XAML-related types, decorate fields with `[InjectedService]` and let the source generator include these services in generated constructors.
+
+Value converters deriving from `ValueConverterBase` are also markup extensions, so they support `[InjectedService]` in the same way.
 
 ```csharp
 public partial class MyView : UserControl
@@ -26,6 +28,19 @@ public partial class MyView : UserControl
     partial void OnInitializedComponent()
     {
         _myService1.DoWork();
+    }
+}
+```
+
+```csharp
+public partial class MyConverter : ValueConverterBase<string>
+{
+    [InjectedService]
+    private readonly IMyService _myService;
+
+    protected override object Convert(string value, Type targetType, object parameter)
+    {
+        return _myService.Transform(value);
     }
 }
 ```

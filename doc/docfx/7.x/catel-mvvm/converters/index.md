@@ -5,6 +5,29 @@ In MVVM, there will be some point where you will need to use converters. Most of
 
 Note that the behavior of most converters can be inverted by using the `ConverterParameter`
 
+## Dependency injection
+
+Value converters in Catel derive from `ValueConverterBase`, which itself derives from `MarkupExtension`. This means they are treated as markup extensions by the XAML infrastructure and fully support dependency injection via `Catel.SourceGenerators`.
+
+To inject services into a custom converter, mark the converter class as `partial` and decorate fields with `[InjectedService]`:
+
+```csharp
+public partial class MyConverter : ValueConverterBase<string>
+{
+    [InjectedService]
+    private readonly IMyService _myService;
+
+    protected override object Convert(string value, Type targetType, object parameter)
+    {
+        return _myService.Transform(value);
+    }
+}
+```
+
+The source generator will produce the required parameterless constructor (needed by XAML) and a constructor that accepts the injected services.
+
+For more details see [Injected services and models](../../catel-sourcegenerators/injected-services-and-models.md).
+
 ## Linking converters
 
 It is possible to link converters. To link converters, set the `Link` property in xaml:
