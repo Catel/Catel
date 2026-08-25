@@ -93,8 +93,9 @@
 <li><code>[InjectedService]</code> to inject services into generated constructors.</li>
 <li><code>[InjectedModel]</code> to inject a model into view models.</li>
 </ul>
-<h2 id="views-markup-extensions-and-behaviors">Views, markup extensions, and behaviors</h2>
+<h2 id="views-markup-extensions-value-converters-and-behaviors">Views, markup extensions, value converters, and behaviors</h2>
 <p>For XAML-related types, decorate fields with <code>[InjectedService]</code> and let the source generator include these services in generated constructors.</p>
+<p>Value converters deriving from <code>ValueConverterBase</code> are also markup extensions, so they support <code>[InjectedService]</code> in the same way.</p>
 <pre><code class="lang-csharp">public partial class MyView : UserControl
 {
     [InjectedService]
@@ -106,6 +107,17 @@
     partial void OnInitializedComponent()
     {
         _myService1.DoWork();
+    }
+}
+</code></pre>
+<pre><code class="lang-csharp">public partial class MyConverter : ValueConverterBase&lt;string&gt;
+{
+    [InjectedService]
+    private readonly IMyService _myService;
+
+    protected override object Convert(string value, Type targetType, object parameter)
+    {
+        return _myService.Transform(value);
     }
 }
 </code></pre>
