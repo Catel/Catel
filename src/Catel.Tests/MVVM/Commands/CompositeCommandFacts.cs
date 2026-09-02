@@ -9,7 +9,7 @@ using NUnit.Framework;
 public class CompositeCommandFacts
 {
     [TestFixture]
-    public class TheCanExecuteState
+    public class The_CanExecute_State
     {
         [TestCase(false, true)]
         [TestCase(true, false)]
@@ -46,7 +46,7 @@ public class CompositeCommandFacts
     }
 
     [TestFixture]
-    public class TheRegisterCommandMethod
+    public class The_RegisterCommand_Method
     {
         [TestCase]
         public void ThrowsArgumentNullExceptionForNullCommand()
@@ -76,10 +76,43 @@ public class CompositeCommandFacts
 
             Assert.That(vm.IsTestCommand1Executed, Is.True);
         }
+
+        [TestCase]
+        public async Task AwaitsRegisteredTaskCommandExecution()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var compositeCommand = new CompositeCommand(serviceProvider);
+            var taskCompletionSource = new TaskCompletionSource<object?>();
+            var childCommandStarted = false;
+
+            var childCommand = new TaskCommand(serviceProvider, async () =>
+            {
+                childCommandStarted = true;
+                await taskCompletionSource.Task;
+            });
+
+            compositeCommand.RegisterCommand(childCommand);
+
+            compositeCommand.Execute();
+
+            var compositeTask = compositeCommand.GetTask();
+
+            Assert.That(childCommandStarted, Is.True);
+            Assert.That(compositeTask.IsCompleted, Is.False);
+
+            taskCompletionSource.SetResult(null);
+
+            await compositeTask;
+
+            Assert.That(compositeTask.IsCompleted, Is.True);
+        }
     }
 
     [TestFixture]
-    public class TheUnregisterCommandMethod
+    public class The_UnregisterCommand_Method
     {
         [TestCase]
         public void ThrowsArgumentNullExceptionForNullCommand()
@@ -117,7 +150,7 @@ public class CompositeCommandFacts
     }
 
     [TestFixture]
-    public class TheRegisterGenericActionMethod
+    public class The_RegisterGenericAction_Method
     {
         [TestCase]
         public void ThrowsArgumentNullExceptionForNullAction()
@@ -151,7 +184,7 @@ public class CompositeCommandFacts
     }
 
     [TestFixture]
-    public class TheUnregisterGenericActionMethod
+    public class The_UnregisterGenericAction_Method
     {
         [TestCase]
         public void ThrowsArgumentNullExceptionForNullAction()
@@ -187,7 +220,7 @@ public class CompositeCommandFacts
     }
 
     [TestFixture]
-    public class TheRegisterAndUnregisterActionFunctionality
+    public class The_Register_And_Unregister_Action_Functionality
     {
         [TestCase]
         public void RegisteredActionsCanBeInvoked()
@@ -254,7 +287,7 @@ public class CompositeCommandFacts
     }
 
     [TestFixture]
-    public class TheAutoUnsubscribeFunctionality
+    public class The_Auto_Unsubscribe_Functionality
     {
         [TestCase]
         public async Task AutomaticallyUnsubscribesCommandOnViewModelClosedAsync()

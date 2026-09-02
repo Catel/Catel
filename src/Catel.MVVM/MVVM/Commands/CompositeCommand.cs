@@ -98,6 +98,8 @@ public class CompositeCommand : TaskCommand<object?, object?, ITaskProgressRepor
                     if (command.CanExecute(parameter))
                     {
                         command.Execute(parameter);
+
+                        await command.GetTask();
                     }
                 }
             }
