@@ -76,6 +76,39 @@ public class CompositeCommandFacts
 
             Assert.That(vm.IsTestCommand1Executed, Is.True);
         }
+
+        [TestCase]
+        public async Task AwaitsRegisteredTaskCommandExecution()
+        {
+            var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+            using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            var compositeCommand = new CompositeCommand(serviceProvider);
+            var taskCompletionSource = new TaskCompletionSource<object?>();
+            var childCommandStarted = false;
+
+            var childCommand = new TaskCommand(serviceProvider, async () =>
+            {
+                childCommandStarted = true;
+                await taskCompletionSource.Task;
+            });
+
+            compositeCommand.RegisterCommand(childCommand);
+
+            compositeCommand.Execute();
+
+            var compositeTask = compositeCommand.GetTask();
+
+            Assert.That(childCommandStarted, Is.True);
+            Assert.That(compositeTask.IsCompleted, Is.False);
+
+            taskCompletionSource.SetResult(null);
+
+            await compositeTask;
+
+            Assert.That(compositeTask.IsCompleted, Is.True);
+        }
     }
 
     [TestFixture]
