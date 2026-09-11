@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - master
   workflow_dispatch:
     inputs:
       deploy:
@@ -28,7 +27,6 @@ jobs:
       AzureCodeSignClientSecret: ''
       AzureCodeSignTenantId: ''
       AzureCodeSignVaultName: ''
-      CodeSignCertificateSubjectName: ''
       NuGetRepositoryUrl: ''
       NuGetUser: ''
       SonarOrganization: ''
@@ -163,7 +161,6 @@ jobs:
             @{ VariableName = 'AzureCodeSignTenantId'; MaskValue = $true }
             @{ VariableName = 'AzureCodeSignClientId'; MaskValue = $true }
             @{ VariableName = 'AzureCodeSignClientSecret'; MaskValue = $true }
-            @{ VariableName = 'CodeSignCertificateSubjectName'; MaskValue = $false }
             @{ VariableName = 'NuGetRepositoryUrl'; MaskValue = $false }
             @{ VariableName = 'NuGetUser'; MaskValue = $true }
             @{ VariableName = 'SonarOrganization'; MaskValue = $false }
@@ -200,11 +197,11 @@ jobs:
         with:
           target: 'BuildAndTest'
           arguments: |
-            IsCiBuild: "true"
-            SonarOrganization: "${{ env.SonarOrganization }}"
-            SonarUrl: "${{ env.SonarUrl }}"
-            SonarProject: "${{ github.repository_owner }}_${{ github.event.repository.name }}"
-            SonarToken: "${{ env.SonarToken }}"
+            IsCiBuild: true
+            SonarOrganization: ${{ env.SonarOrganization }}
+            SonarUrl: ${{ env.SonarUrl }}
+            SonarProject: ${{ github.repository_owner }}_${{ github.event.repository.name }}
+            SonarToken: ${{ env.SonarToken }}
 
       # Build & deploy
       - name: Build and deploy via Cake
@@ -214,16 +211,15 @@ jobs:
         with:
           target: 'BuildAndDeploy'
           arguments: |
-            AzureCodeSignCertificateName: "${{ env.AzureCodeSignCertificateName }}"
-            AzureCodeSignClientId: "${{ env.AzureCodeSignClientId }}"
-            AzureCodeSignClientSecret: "${{ env.AzureCodeSignClientSecret }}"
-            AzureCodeSignTenantId: "${{ env.AzureCodeSignTenantId }}"
-            AzureCodeSignVaultName: "${{ env.AzureCodeSignVaultName }}"
-            CodeSignCertificateSubjectName: "${{ env.CodeSignCertificateSubjectName }}"
-            IsCiBuild: "false"
-            NuGetRepositoryUrl: "${{ env.NuGetRepositoryUrl }}"
-            NuGetRepositoryApiKey: "${{steps.nuget-login.outputs.NUGET_API_KEY}}"
-            SonarOrganization: "${{ env.SonarOrganization }}"
-            SonarUrl: "${{ env.SonarUrl }}"
-            SonarProject: "${{ github.repository_owner }}_${{ github.event.repository.name }}"
-            SonarToken: "${{ env.SonarToken }}"
+            AzureCodeSignCertificateName: ${{ env.AzureCodeSignCertificateName }}
+            AzureCodeSignClientId: ${{ env.AzureCodeSignClientId }}
+            AzureCodeSignClientSecret: ${{ env.AzureCodeSignClientSecret }}
+            AzureCodeSignTenantId: ${{ env.AzureCodeSignTenantId }}
+            AzureCodeSignVaultName: ${{ env.AzureCodeSignVaultName }}
+            IsCiBuild: false
+            NuGetRepositoryUrl: ${{ env.NuGetRepositoryUrl }}
+            NuGetRepositoryApiKey: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+            SonarOrganization: ${{ env.SonarOrganization }}
+            SonarUrl: ${{ env.SonarUrl }}
+            SonarProject: ${{ github.repository_owner }}_${{ github.event.repository.name }}
+            SonarToken: ${{ env.SonarToken }}
