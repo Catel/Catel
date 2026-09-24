@@ -118,15 +118,15 @@
       },
       "Verify.NUnit": {
         "type": "Direct",
-        "requested": "[33.1.1, )",
-        "resolved": "33.1.1",
-        "contentHash": "fCZwrLNnky52pobradA2SmMZCRsdX6DoLWUHilOkK5Z95l+F3OnSMBEE750OHugot9N0ekWmJIj9NBcoxHpJZw==",
+        "requested": "[33.1.4, )",
+        "resolved": "33.1.4",
+        "contentHash": "2SYUUJem6K2sxzGBAI7SQqsbhXXqQYarq/6miiDQAJokciqLsr4Lkelwx3bCI+toMzlWpDTIxLvlk88s+Ci55g==",
         "dependencies": {
           "Argon": "0.37.0",
-          "DiffEngine": "20.3.1",
+          "DiffEngine": "20.5.1",
           "NUnit": "4.6.1",
           "SimpleInfoName": "3.2.0",
-          "Verify": "33.1.1"
+          "Verify": "33.1.4"
         }
       },
       "WpfAnalyzers": {
@@ -147,16 +147,16 @@
       },
       "DiffEngine": {
         "type": "Transitive",
-        "resolved": "20.3.1",
-        "contentHash": "3oOgllnK7IMS5fzlrkSxNM49wepIS36cxOfVzxSAdj0svWN6tw5teo3aERFABwKZcz2tko52ONvmfLUba0uiag==",
+        "resolved": "20.5.1",
+        "contentHash": "0P1YWymI2g5XB0f5pEv+PmNhWjHDY170yBhCU3qC7+sU36ZnvlU6rx5YP7YAImHkTuPMtTi0X8vF6UAjf0wH1g==",
         "dependencies": {
-          "EmptyFiles": "8.18.2"
+          "EmptyFiles": "8.19.0"
         }
       },
       "EmptyFiles": {
         "type": "Transitive",
-        "resolved": "8.18.2",
-        "contentHash": "9TKkDyiREYxgTDeoBrVlmBP83w7Hjhj5sDACQhketSgRhgaXRKpjPW7sazx3PEOg0i5PbrwLjoJG9caavf69hg=="
+        "resolved": "8.19.0",
+        "contentHash": "ZQrJZYWh2VG0PXpyorNHmjmlt/cJTEcPxna0H2rYK9BHh4cI0wAM7IGwdYxihBVSPrh/ISHEeP+ZqfSdduQ9Sw=="
       },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
@@ -393,11 +393,11 @@
       },
       "Verify": {
         "type": "Transitive",
-        "resolved": "33.1.1",
-        "contentHash": "uL6ZjH+AThGUEZ9IazkE/OgAIFew8/Rc8uGWJoyX/b4HvOtArO6lgo8tnlrmVPZOakVQzobpAFs83w0otzNJvw==",
+        "resolved": "33.1.4",
+        "contentHash": "Vs7lK1KyRlf4awNXXnTUIZT2CJ5uF6I35uoxZVfQ5kKUBwnE0XXFvY9lGzlfVZzk+/ekZ0A3B1h8lhaZfWG5FA==",
         "dependencies": {
           "Argon": "0.37.0",
-          "DiffEngine": "20.3.1",
+          "DiffEngine": "20.5.1",
           "SimpleInfoName": "3.2.0"
         }
       },
