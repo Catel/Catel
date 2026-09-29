@@ -50,6 +50,36 @@ jobs:
         with:
           dotnet-version: '10.0.x'    
 
+      - name: Determine version
+        id: gitversion
+        shell: pwsh
+        run: |
+          dotnet tool restore
+
+          $gitVersion = dotnet tool run dotnet-gitversion /output json | ConvertFrom-Json
+
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "fullSemVer=$($gitVersion.FullSemVer)"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "majorMinorPatch=$($gitVersion.MajorMinorPatch)"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "nuGetVersion=$($gitVersion.NuGetVersionV2)"
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "commitsSinceVersionSource=$($gitVersion.CommitsSinceVersionSource)"
+    
+          [string[]] $tags = @(
+            if ($env:Deploy -eq 'true') { 'deploy' } else { 'ci' }
+          )
+
+          $hubActions = [ordered]@{
+            Version = $gitVersion.FullSemVer
+            Tags    = $tags
+          }
+          $hubActions | ConvertTo-Json | Set-Content -Path hubactions.json
+
+      - name: Upload HubActions metadata
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: hubactions.json
+          path: hubactions.json
+          if-no-files-found: error
+
       - name: Azure login (for Key Vault access)
         id: azure-login
         if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
@@ -138,19 +168,6 @@ jobs:
         with:
           user: ${{ env.NuGetUser }}
 
-      - name: Determine version
-        id: gitversion
-        shell: pwsh
-        run: |
-          dotnet tool restore
-
-          $gitVersion = dotnet tool run dotnet-gitversion /output json | ConvertFrom-Json
-
-          Add-Content -Path $env:GITHUB_OUTPUT -Value "fullSemVer=$($gitVersion.FullSemVer)"
-          Add-Content -Path $env:GITHUB_OUTPUT -Value "majorMinorPatch=$($gitVersion.MajorMinorPatch)"
-          Add-Content -Path $env:GITHUB_OUTPUT -Value "nuGetVersion=$($gitVersion.NuGetVersionV2)"
-          Add-Content -Path $env:GITHUB_OUTPUT -Value "commitsSinceVersionSource=$($gitVersion.CommitsSinceVersionSource)"
-    
       # Build, test & deploy
       - name: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy && format('Build and deploy {0} via Cake', steps.gitversion.outputs.fullSemVer) || format('Build and test {0} via Cake', steps.gitversion.outputs.fullSemVer) }}
         id: cake-build
