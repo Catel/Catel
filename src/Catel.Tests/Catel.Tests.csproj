@@ -26,13 +26,13 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.*" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     <PackageReference Include="Moq" Version="4.21.0" />
-    <PackageReference Include="NUnit" Version="4.6.1" PrivateAssets="all" />
+    <PackageReference Include="NUnit" Version="5.0.0" PrivateAssets="all" />
     <PackageReference Include="NUnit3TestAdapter" Version="6.3.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="PublicApiGenerator" Version="11.5.4" PrivateAssets="all" />
-    <PackageReference Include="Verify.NUnit" Version="33.1.5" />
+    <PackageReference Include="Verify.NUnit" Version="33.2.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('net8.0')) ">
