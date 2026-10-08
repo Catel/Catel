@@ -118,15 +118,15 @@
       },
       "Verify.NUnit": {
         "type": "Direct",
-        "requested": "[33.3.1, )",
-        "resolved": "33.3.1",
-        "contentHash": "SzvQJQ7Kyyt27fxr854xWrGOm2T3PisLos+Sw8Psvz089Lg7ivK43zFdlthdo7lJmVeQyQBOm1M3YirOalyx9A==",
+        "requested": "[33.3.2, )",
+        "resolved": "33.3.2",
+        "contentHash": "ipRe1NLzy6J3NDI86Ll8Qn16U4XWOTtIFTjiRhDLmBWRoBpsBmA9RKpEdf/F4CkFhBi8ox4Hes2QK/sKFVyVJQ==",
         "dependencies": {
-          "Argon": "0.38.0",
-          "DiffEngine": "20.7.0",
+          "Argon": "0.38.2",
+          "DiffEngine": "20.7.2",
           "NUnit": "5.0.0",
-          "SimpleInfoName": "3.2.0",
-          "Verify": "33.3.1"
+          "SimpleInfoName": "3.2.1",
+          "Verify": "33.3.2"
         }
       },
       "WpfAnalyzers": {
@@ -137,8 +137,8 @@
       },
       "Argon": {
         "type": "Transitive",
-        "resolved": "0.38.0",
-        "contentHash": "5MJwC4xUJEDHZpQopGRf9NqycfsAtkLF4JuuMbLoiPHZja6XMFLbhpdrn24l/qpRpWRoLHBclQIcu8cd5HEULQ=="
+        "resolved": "0.38.2",
+        "contentHash": "9VbAuN/j1KX0E2OVibwK1kZCIBul6Oa2K7VFE2UNVBLHD290HTpiF9T3sbEUH0u+iBipK/6VQE8lpGDC6g8cWA=="
       },
       "Castle.Core": {
         "type": "Transitive",
@@ -147,16 +147,16 @@
       },
       "DiffEngine": {
         "type": "Transitive",
-        "resolved": "20.7.0",
-        "contentHash": "GGyb96POGjAeMyDFTa2PfDxK7KVKtMl3rXs1EjNsKCNVvTRMY9R5s+SM7XpbxcZtKxYpzI6OcgJxyYqKG8g+rw==",
+        "resolved": "20.7.2",
+        "contentHash": "GULvEiwPjnJp+xBy56wqIewmF7/QrTAw/gQWddgQMSXESpUpjF+1PT+ukHLG5TqNXSs9q8Dp9DDub0eeyKc6ww==",
         "dependencies": {
-          "EmptyFiles": "8.20.0"
+          "EmptyFiles": "8.20.1"
         }
       },
       "EmptyFiles": {
         "type": "Transitive",
-        "resolved": "8.20.0",
-        "contentHash": "KnbcQk4Gvc+TSTttmSmdxGiQb+2AA739jcZ3Ics9R2l7UvDIHrL+aTtYTfn3PJIGA/NMqkd26aN/ACtJ4MCKZA=="
+        "resolved": "8.20.1",
+        "contentHash": "0YgQ3Tg88fwTk+5hqouvTEb4L4ca8wdeCXfC+e1dMtjH6V2lQERi3M54XeDTApfzHXE50re7jTyUP3yBZBVSoA=="
       },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
@@ -383,8 +383,8 @@
       },
       "SimpleInfoName": {
         "type": "Transitive",
-        "resolved": "3.2.0",
-        "contentHash": "K8ivHRbPWfncijk62Dan/r/z55gwq3aFzqB6yFlD9X0bbpIaacHyHH2cpcIdz0FECUpERUZTwxts0z4gRWpQpA=="
+        "resolved": "3.2.1",
+        "contentHash": "s6wdkw1k6PlFVLU3tNI1z1N7pljbUSQ6bB8RY4WYzdkVSx3w32uFhuRdbxuEcbqgSjf3FZwAlhy/zdfH5NWKrg=="
       },
       "System.ComponentModel.Annotations": {
         "type": "Transitive",
@@ -393,12 +393,12 @@
       },
       "Verify": {
         "type": "Transitive",
-        "resolved": "33.3.1",
-        "contentHash": "+Eo9c7LeyCacE3ukdqzzd5TQQBBqN93s5DnMPKlNeIFaAaEgEHZIppWan8LyYu2zf3dfddF7Z6txorKa4MY3pA==",
+        "resolved": "33.3.2",
+        "contentHash": "c4CrBw4QlcHyHPuk/PBcCWd7iQsc8o506BDRhfeaydwKeEr0wdpKJxQo0pSWl2i6YOfgy3CuXMgq6N6QYkf1jg==",
         "dependencies": {
-          "Argon": "0.38.0",
-          "DiffEngine": "20.7.0",
-          "SimpleInfoName": "3.2.0"
+          "Argon": "0.38.2",
+          "DiffEngine": "20.7.2",
+          "SimpleInfoName": "3.2.1"
         }
       },
       "catel.core": {
