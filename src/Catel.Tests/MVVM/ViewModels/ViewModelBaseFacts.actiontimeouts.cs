@@ -37,7 +37,7 @@ public partial class ViewModelBaseFacts
 
         // Need duplicate call
         _ = vm.SaveAndCloseViewModelAsync();
-        Assert.ThrowsAsync<TimeoutException>(async () => await vm.SaveAndCloseViewModelAsync());
+        await Assert.ThrowsAsync<TimeoutException>(async () => await vm.SaveAndCloseViewModelAsync());
     }
 
     [TestCase]
@@ -75,7 +75,7 @@ public partial class ViewModelBaseFacts
 
         // Need duplicate call
         _ = vm.CancelAndCloseViewModelAsync();
-        Assert.ThrowsAsync<TimeoutException>(async () => await vm.CancelAndCloseViewModelAsync());
+        await Assert.ThrowsAsync<TimeoutException>(async () => await vm.CancelAndCloseViewModelAsync());
     }
 
     [TestCase]
