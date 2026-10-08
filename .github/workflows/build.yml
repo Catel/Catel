@@ -267,20 +267,20 @@ jobs:
       # Get a short-lived NuGet API key
       - name: NuGet login (OIDC → temp API key)
         id: nuget-login
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy }}
+        if: ${{ github.event_name == 'workflow_dispatch' && env.Deploy }}
         uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
         with:
           user: ${{ env.NuGetUser }}
 
       # Build, test & deploy
-      - name: ${{ github.event_name == 'workflow_dispatch' && inputs.Deploy && format('Build and deploy {0} via Cake', steps.gitversion.outputs.fullSemVer) || format('Build and test {0} via Cake', steps.gitversion.outputs.fullSemVer) }}
+      - name: ${{ github.event_name == 'workflow_dispatch' && env.Deploy && format('Build and deploy {0} via Cake', steps.gitversion.outputs.fullSemVer) || format('Build and test {0} via Cake', steps.gitversion.outputs.fullSemVer) }}
         id: cake-build
         if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
         shell: pwsh
         env:
           # Generic
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IsCiBuild: ${{ github.event_name != 'workflow_dispatch' || inputs.Deploy != true }}
+          IsCiBuild: ${{ github.event_name != 'workflow_dispatch' || env.Deploy != true }}
 
           # Specific
           AzureCodeSignCertificateName: ${{ env.AzureCodeSignCertificateName }}
