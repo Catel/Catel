@@ -6,11 +6,11 @@ on:
       - develop
   workflow_dispatch:
     inputs:
-      deploy:
-        description: Deploy the component(s)
+      Deploy:
+        description: Deploy
         required: false
         type: boolean
-        default: true
+        default: false
   #pull_request:
     # Note: don't run on PR for security reasons
   
@@ -23,13 +23,19 @@ jobs:
     runs-on: windows-latest # Required for some (WPF) projects
     env:
       Category: 'Public'
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
       AzureCodeSignCertificateName: ''
       AzureCodeSignClientId: ''
       AzureCodeSignClientSecret: ''
       AzureCodeSignTenantId: ''
       AzureCodeSignVaultName: ''
-      Deploy: ${{ inputs.deploy }}
+      Deploy: ${{ inputs.Deploy }}
+      NuGetPackageSources: ''
+      NuGetPackageSourcesNames: ''
+      NuGetPackageSourcesTokens: ''
+      NuGetPackageSourcesUsernames: ''
       NuGetRepositoryUrl: ''
+      NuGetRepositoryApiKey: ''
       NuGetUser: ''
       SonarOrganization: ''
       SonarUrl: ''
@@ -48,7 +54,9 @@ jobs:
         id: setup-dotnet
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
-          dotnet-version: '10.0.x'    
+          dotnet-version: '10.0.x'
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
 
       - name: Determine version
         id: gitversion
@@ -89,6 +97,38 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Determine required Key Vault secrets
+        id: determine-keyvault-secrets
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+        shell: pwsh
+        run: |
+          $secretVariables = @(
+            @{ VariableName = 'NuGetPackageSources'; MaskValue = $false; IsOptional = $true }
+            @{ VariableName = 'NuGetPackageSourcesNames'; MaskValue = $false; IsOptional = $true }
+            @{ VariableName = 'NuGetPackageSourcesTokens'; MaskValue = $true; IsOptional = $true }
+            @{ VariableName = 'NuGetPackageSourcesUsernames'; MaskValue = $false; IsOptional = $true }
+            @{ VariableName = 'SonarOrganization'; MaskValue = $false; IsOptional = $true }
+            @{ VariableName = 'SonarUrl'; MaskValue = $false; IsOptional = $true }
+            @{ VariableName = 'SonarToken'; MaskValue = $true; IsOptional = $true }
+          )
+
+          if ($env:Deploy -eq 'true') {
+            $secretVariables += @(
+              @{ VariableName = 'AzureCodeSignCertificateName'; MaskValue = $true }
+              @{ VariableName = 'AzureCodeSignTenantId'; MaskValue = $true }
+              @{ VariableName = 'AzureCodeSignClientId'; MaskValue = $true }
+              @{ VariableName = 'AzureCodeSignClientSecret'; MaskValue = $true }
+              @{ VariableName = 'AzureDeploymentsStorageConnectionString'; MaskValue = $true }
+              @{ VariableName = 'NuGetRepositoryUrl'; MaskValue = $false; IsOptional = $true }
+              @{ VariableName = 'NuGetRepositoryApiKey'; MaskValue = $true; IsOptional = $true }
+              @{ VariableName = 'NuGetUser'; MaskValue = $true; IsOptional = $true }
+              @{ VariableName = 'VeloPackUpdateUrl'; MaskValue = $false; IsOptional = $true }
+            )
+          }
+
+          $secretsJson = ConvertTo-Json -InputObject $secretVariables -Compress -Depth 5 -AsArray
+          Add-Content -Path $env:GITHUB_OUTPUT -Value "secrets=$secretsJson"
+
       - name: Retrieve secrets from Key Vault
         id: key-vault-secrets
         if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
@@ -96,6 +136,7 @@ jobs:
         env:
           AZURE_KEYVAULT_NAME: ${{ vars.AZURE_KEYVAULT_NAME || secrets.AZURE_KEYVAULT_NAME }}
           REPOSITORY_OWNER: ${{ github.repository_owner }}
+          SECRET_VARIABLES_JSON: ${{ steps.determine-keyvault-secrets.outputs.secrets }}
         run: |
           if ([string]::IsNullOrWhiteSpace($env:AZURE_KEYVAULT_NAME)) {
             throw "AZURE_KEYVAULT_NAME is not configured"
@@ -107,58 +148,121 @@ jobs:
 
           Write-Output "::add-mask::$env:AZURE_KEYVAULT_NAME"
 
-          function Get-SecretValueFromCandidates {
+          $vaultName = $env:AZURE_KEYVAULT_NAME
+          $repositoryOwner = $env:REPOSITORY_OWNER
+          $secretVariables = $env:SECRET_VARIABLES_JSON | ConvertFrom-Json
+
+          # List secrets once, then resolve/retrieve them in parallel instead of up to 3 sequential az calls per variable.
+          $vaultSecretNames = az keyvault secret list --vault-name $vaultName --query "[].name" -o tsv 2>&1
+          if ($LASTEXITCODE -ne 0) {
+            throw "Unable to list secrets in Key Vault '$vaultName'. $($vaultSecretNames -join ' ')"
+          }
+          $vaultSecretNameSet = [System.Collections.Generic.HashSet[string]]::new([string[]]$vaultSecretNames, [System.StringComparer]::OrdinalIgnoreCase)
+
+          function Resolve-SecretName {
             param(
               [Parameter(Mandatory = $true)]
-              [string] $VariableName
+              [string] $VariableName,
+              [bool] $IsOptional = $false
             )
 
+            $secretName = $VariableName -replace '_', '--'
             $candidateNames = @(
-              "$($env:REPOSITORY_OWNER)-$($env:Category)-$VariableName"
-              "$($env:REPOSITORY_OWNER)-$VariableName"
-              "$VariableName"
+              "$repositoryOwner-$env:Category-$secretName"
+              "$repositoryOwner-$secretName"
+              "$secretName"
             )
 
             foreach ($candidateName in $candidateNames) {
-              $secretValue = az keyvault secret show --only-show-errors --vault-name $env:AZURE_KEYVAULT_NAME --name $candidateName --query value -o tsv 2>$null
-
-              if ($LASTEXITCODE -eq 0) {
-                return [string]$secretValue
+              if ($vaultSecretNameSet.Contains($candidateName)) {
+                return $candidateName
               }
             }
 
-            throw "Key Vault secret for '$VariableName' was not found. Tried: $($candidateNames -join ', ')"
-          }
-
-          $secretVariables = @(
-            @{ VariableName = 'SonarOrganization'; MaskValue = $false }
-            @{ VariableName = 'SonarUrl'; MaskValue = $false }
-            @{ VariableName = 'SonarToken'; MaskValue = $true }
-          )
-
-          if ($env:Deploy -eq 'true') {
-            $secretVariables += @(
-              @{ VariableName = 'AzureCodeSignCertificateName'; MaskValue = $true }
-              @{ VariableName = 'AzureCodeSignTenantId'; MaskValue = $true }
-              @{ VariableName = 'AzureCodeSignClientId'; MaskValue = $true }
-              @{ VariableName = 'AzureCodeSignClientSecret'; MaskValue = $true }
-              @{ VariableName = 'NuGetRepositoryUrl'; MaskValue = $false }
-              @{ VariableName = 'NuGetUser'; MaskValue = $true }
-            )
-          }
-
-          foreach ($secretVariable in $secretVariables) {
-            $envName = $secretVariable.VariableName
-            $secretValue = Get-SecretValueFromCandidates -VariableName $envName
-
-            if ($secretVariable.MaskValue -and -not [string]::IsNullOrEmpty($secretValue)) {
-              Write-Output "::add-mask::$secretValue"
+            if ($IsOptional) {
+              return $null
             }
 
-            Add-Content -Path $env:GITHUB_ENV -Value "$envName=$secretValue"
+            throw "Unable to find a Key Vault secret for '$VariableName' in '$vaultName'. Tried: $($candidateNames -join ', ')"
+          }
+
+          $resolvedSecrets = foreach ($secretVariable in $secretVariables) {
+            $isOptional = $false
+            if ($null -ne $secretVariable.IsOptional) {
+              $isOptional = [bool]$secretVariable.IsOptional
+            }
+
+            $secretName = Resolve-SecretName -VariableName $secretVariable.VariableName -IsOptional $isOptional
+            if ($null -ne $secretName) {
+              [pscustomobject]@{
+                EnvName    = if ($secretVariable.EnvironmentVariableName) { $secretVariable.EnvironmentVariableName } else { $secretVariable.VariableName }
+                MaskValue  = $secretVariable.MaskValue
+                SecretName = $secretName
+              }
+            }
+          }
+
+          $secretResults = $resolvedSecrets | ForEach-Object -Parallel {
+            $entry = $_
+            $vaultName = $using:vaultName
+
+            try {
+              $secretValue = az keyvault secret show --only-show-errors --vault-name $vaultName --name $entry.SecretName --query value -o tsv 2>&1
+
+              if ($LASTEXITCODE -ne 0) {
+                throw "Unable to retrieve Key Vault secret '$($entry.SecretName)' from '$vaultName'. $($secretValue -join ' ')"
+              }
+
+              [pscustomobject]@{
+                EnvName      = $entry.EnvName
+                MaskValue    = $entry.MaskValue
+                SecretValue  = [string]$secretValue
+                ErrorMessage = $null
+              }
+            }
+            catch {
+              [pscustomobject]@{
+                EnvName      = $entry.EnvName
+                MaskValue    = $entry.MaskValue
+                SecretValue  = $null
+                ErrorMessage = $_.Exception.Message
+              }
+            }
+          } -ThrottleLimit 8
+
+          $failedSecrets = @($secretResults | Where-Object { $_.ErrorMessage })
+          if ($failedSecrets.Count -gt 0) {
+            throw ($failedSecrets.ErrorMessage -join "`n")
+          }
+
+          foreach ($secretResult in $secretResults) {
+            if ($secretResult.MaskValue -and -not [string]::IsNullOrEmpty($secretResult.SecretValue)) {
+              Write-Output "::add-mask::$($secretResult.SecretValue)"
+            }
+
+            Add-Content -Path $env:GITHUB_ENV -Value "$($secretResult.EnvName)=$($secretResult.SecretValue)"
           }
 
           Add-Content -Path $env:GITHUB_ENV -Value "AzureCodeSignVaultName=$env:AZURE_KEYVAULT_NAME"
+
+      - name: Calculate NuGet variables
+        id: calculate-nuget-variables
+        shell: pwsh
+        run: |
+          $nuGetPackageSourceDefinitions = @(
+            @{ Url = 'https://api.nuget.org/v3/index.json'; Name = 'nuget.org'; Token = ''; Username = '' }
+          )
+
+          $nuGetPackageSources = $nuGetPackageSourceDefinitions.Url -join ';'
+          $nuGetPackageSourcesNames = $nuGetPackageSourceDefinitions.Name -join ';'
+          $nuGetPackageSourcesTokens = $nuGetPackageSourceDefinitions.Token -join ';'
+          $nuGetPackageSourcesUsernames = $nuGetPackageSourceDefinitions.Username -join ';'
+
+          Add-Content -Path $env:GITHUB_ENV -Value "NuGetPackageSources=$nuGetPackageSources"
+          Add-Content -Path $env:GITHUB_ENV -Value "NuGetPackageSourcesNames=$nuGetPackageSourcesNames"
+          Add-Content -Path $env:GITHUB_ENV -Value "NuGetPackageSourcesTokens=$nuGetPackageSourcesTokens"
+          Add-Content -Path $env:GITHUB_ENV -Value "NuGetPackageSourcesUsernames=$nuGetPackageSourcesUsernames"
+
     
       # Get a short-lived NuGet API key
       - name: NuGet login (OIDC → temp API key)
@@ -169,14 +273,14 @@ jobs:
           user: ${{ env.NuGetUser }}
 
       # Build, test & deploy
-      - name: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy && format('Build and deploy {0} via Cake', steps.gitversion.outputs.fullSemVer) || format('Build and test {0} via Cake', steps.gitversion.outputs.fullSemVer) }}
+      - name: ${{ github.event_name == 'workflow_dispatch' && inputs.Deploy && format('Build and deploy {0} via Cake', steps.gitversion.outputs.fullSemVer) || format('Build and test {0} via Cake', steps.gitversion.outputs.fullSemVer) }}
         id: cake-build
         if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
         shell: pwsh
         env:
           # Generic
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          IsCiBuild: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy != true }}
+          IsCiBuild: ${{ github.event_name != 'workflow_dispatch' || inputs.Deploy != true }}
 
           # Specific
           AzureCodeSignCertificateName: ${{ env.AzureCodeSignCertificateName }}
@@ -184,6 +288,10 @@ jobs:
           AzureCodeSignClientSecret: ${{ env.AzureCodeSignClientSecret }}
           AzureCodeSignTenantId: ${{ env.AzureCodeSignTenantId }}
           AzureCodeSignVaultName: ${{ env.AzureCodeSignVaultName }}
+          NuGetPackageSources: ${{ env.NuGetPackageSources }}
+          NuGetPackageSourcesNames: ${{ env.NuGetPackageSourcesNames }}
+          NuGetPackageSourcesTokens: ${{ env.NuGetPackageSourcesTokens }}
+          NuGetPackageSourcesUsernames: ${{ env.NuGetPackageSourcesUsernames }}
           NuGetRepositoryUrl: ${{ env.NuGetRepositoryUrl }}
           NuGetRepositoryApiKey: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
           SonarOrganization: ${{ env.SonarOrganization }}
