@@ -1,3 +1,10 @@
-mode: ContinuousDeployment
-assembly-versioning-scheme: MajorMinorPatch 
-next-version: 7.0.0
+# $schema: https://gitversion.net/schemas/6.8/GitVersion.configuration.json
+workflow: GitFlow/v1
+#next-version: 1.0.0
+branches:
+  release:
+    mode: ContinuousDelivery
+  feature:
+    mode: ContinuousDelivery
+  hotfix:
+    mode: ContinuousDelivery

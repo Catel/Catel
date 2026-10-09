@@ -66,6 +66,8 @@ jobs:
 
           $gitVersion = dotnet tool run dotnet-gitversion /output json | ConvertFrom-Json
 
+          $gitVersion | ConvertTo-Json -Depth 10 | Write-Output
+
           Add-Content -Path $env:GITHUB_OUTPUT -Value "fullSemVer=$($gitVersion.FullSemVer)"
           Add-Content -Path $env:GITHUB_OUTPUT -Value "majorMinorPatch=$($gitVersion.MajorMinorPatch)"
           Add-Content -Path $env:GITHUB_OUTPUT -Value "nuGetVersion=$($gitVersion.NuGetVersionV2)"
