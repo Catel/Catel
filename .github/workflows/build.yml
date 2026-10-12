@@ -84,7 +84,7 @@ jobs:
           $hubActions | ConvertTo-Json | Set-Content -Path hubactions.json
 
       - name: Upload HubActions metadata
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: hubactions.json
           path: hubactions.json
@@ -285,21 +285,8 @@ jobs:
           IsCiBuild: ${{ env.Deploy != 'true' }}
 
           # Specific
-          AzureCodeSignCertificateName: ${{ env.AzureCodeSignCertificateName }}
-          AzureCodeSignClientId: ${{ env.AzureCodeSignClientId }}
-          AzureCodeSignClientSecret: ${{ env.AzureCodeSignClientSecret }}
-          AzureCodeSignTenantId: ${{ env.AzureCodeSignTenantId }}
-          AzureCodeSignVaultName: ${{ env.AzureCodeSignVaultName }}
-          NuGetPackageSources: ${{ env.NuGetPackageSources }}
-          NuGetPackageSourcesNames: ${{ env.NuGetPackageSourcesNames }}
-          NuGetPackageSourcesTokens: ${{ env.NuGetPackageSourcesTokens }}
-          NuGetPackageSourcesUsernames: ${{ env.NuGetPackageSourcesUsernames }}
-          NuGetRepositoryUrl: ${{ env.NuGetRepositoryUrl }}
           NuGetRepositoryApiKey: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
-          SonarOrganization: ${{ env.SonarOrganization }}
           SonarProject: ${{ github.repository_owner }}_${{ github.event.repository.name }}
-          SonarToken: ${{ env.SonarToken }}
-          SonarUrl: ${{ env.SonarUrl }}
         run: |
           $deploy = $env:Deploy -eq 'true'
           $target = if ($deploy) { 'BuildAndDeploy' } else { 'BuildAndTest' }
