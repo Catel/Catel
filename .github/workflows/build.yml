@@ -120,11 +120,9 @@ jobs:
               @{ VariableName = 'AzureCodeSignTenantId'; MaskValue = $true }
               @{ VariableName = 'AzureCodeSignClientId'; MaskValue = $true }
               @{ VariableName = 'AzureCodeSignClientSecret'; MaskValue = $true }
-              @{ VariableName = 'AzureDeploymentsStorageConnectionString'; MaskValue = $true }
               @{ VariableName = 'NuGetRepositoryUrl'; MaskValue = $false; IsOptional = $true }
               @{ VariableName = 'NuGetRepositoryApiKey'; MaskValue = $true; IsOptional = $true }
               @{ VariableName = 'NuGetUser'; MaskValue = $true; IsOptional = $true }
-              @{ VariableName = 'VeloPackUpdateUrl'; MaskValue = $false; IsOptional = $true }
             )
           }
 
