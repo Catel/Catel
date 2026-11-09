@@ -191,13 +191,13 @@ public class ViewModelFactory : IViewModelFactory
 
         IViewModel? viewModel = null;
 
-        // If this is a parent vm, we can skip the dependency injection
-        if (args.Length == 1)
+        // Check if a single parent view model is passed and can be accepted as model
+        object?[] argsToUse = args;
+        if (args.Length == 1 && args[0] is IViewModel parentViewModel)
         {
-            var parentViewModel = args[0] as IViewModel;
-            if (parentViewModel is not null)
+            if (!CanViewModelAcceptAsModel(viewModelType, typeof(IViewModel)))
             {
-                args = Array.Empty<object?>();
+                argsToUse = Array.Empty<object?>();
             }
         }
 
@@ -205,11 +205,11 @@ public class ViewModelFactory : IViewModelFactory
         // view model can be constructed with a nullable object. If a user wants a view model to be constructed
         // without any datacontext or injection, he/she should use an empty default constructor which will only
         // be used when injection is not possible
-        if (args.Length > 0)
+        if (argsToUse.Length > 0)
         {
             try
             {
-               viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType, (object[])args) as IViewModel;
+               viewModel = ActivatorUtilities.CreateInstance(_serviceProvider, viewModelType, (object[])argsToUse) as IViewModel;
             }
             catch (Exception)
             {

@@ -95,4 +95,65 @@ public partial class ViewModelFactoryFacts
         Assert.That(viewModel, Is.Not.Null);
         Assert.That(viewModel!.Integer, Is.EqualTo(42));
     }
+
+    [Test]
+    public void ViewModelFactory_CreateViewModel_Allows_Parent_ViewModel_Injection_As_Model()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var viewModelFactory = new ViewModelFactory(new NullLogger<ViewModelFactory>(), serviceProvider);
+        var parentViewModel = viewModelFactory.CreateViewModel(typeof(ViewModelFactoryTestViewModelWithOnlyDefaultConstructor), dataContext: null) as IViewModel;
+
+        Assert.That(parentViewModel, Is.Not.Null);
+
+        // ViewModelFactoryParentViewModelTestViewModel accepts an IViewModel as its first constructor parameter
+        var childViewModel = viewModelFactory.CreateViewModel(typeof(ViewModelFactoryParentViewModelTestViewModel), dataContext: parentViewModel) as ViewModelFactoryParentViewModelTestViewModel;
+
+        Assert.That(childViewModel, Is.Not.Null);
+        Assert.That(childViewModel!.ParentViewModel, Is.SameAs(parentViewModel));
+    }
+
+    [Test]
+    public void ViewModelFactory_CreateViewModel_Falls_Back_To_Default_Constructor_When_Parent_ViewModel_Cannot_Be_Injected()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var viewModelFactory = new ViewModelFactory(new NullLogger<ViewModelFactory>(), serviceProvider);
+        var parentViewModel = viewModelFactory.CreateViewModel(typeof(ViewModelFactoryTestViewModelWithOnlyDefaultConstructor), dataContext: null) as IViewModel;
+
+        Assert.That(parentViewModel, Is.Not.Null);
+
+        // ViewModelFactoryModelInjectionOnlyTestViewModel requires a string model, not a parent ViewModel.
+        // Since it cannot accept IViewModel as a model, the factory will try with empty args,
+        // which fails the injection check, so it returns null.
+        var childViewModel = viewModelFactory.CreateViewModel(typeof(ViewModelFactoryModelInjectionOnlyTestViewModel), dataContext: parentViewModel) as ViewModelFactoryModelInjectionOnlyTestViewModel;
+
+        Assert.That(childViewModel, Is.Null);
+    }
+
+    [Test]
+    public void ViewModelFactory_CreateViewModel_Prefers_Parent_ViewModel_Injection_Over_Empty_Constructor()
+    {
+        var serviceCollection = ServiceCollectionHelper.CreateServiceCollection();
+
+        using var serviceProvider = serviceCollection.BuildServiceProvider();
+
+        var viewModelFactory = new ViewModelFactory(new NullLogger<ViewModelFactory>(), serviceProvider);
+        var parentViewModel = viewModelFactory.CreateViewModel(typeof(ViewModelFactoryTestViewModelWithOnlyDefaultConstructor), dataContext: null) as IViewModel;
+
+        Assert.That(parentViewModel, Is.Not.Null);
+
+        // ViewModelFactoryParentViewModelTestViewModel has both:
+        // - A constructor accepting (IServiceProvider) - the default/empty constructor
+        // - A constructor accepting (IViewModel, IServiceProvider) - parent ViewModel injection
+        // When a parent ViewModel is passed, it should use the constructor that accepts it (parent injection preferred)
+        var childViewModel = viewModelFactory.CreateViewModel(typeof(ViewModelFactoryParentViewModelTestViewModel), dataContext: parentViewModel) as ViewModelFactoryParentViewModelTestViewModel;
+
+        Assert.That(childViewModel, Is.Not.Null);
+        Assert.That(childViewModel!.ParentViewModel, Is.SameAs(parentViewModel));
+    }
 }
