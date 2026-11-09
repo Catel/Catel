@@ -195,7 +195,7 @@ public class ViewModelFactory : IViewModelFactory
         object?[] argsToUse = args;
         if (args.Length == 1 && args[0] is IViewModel parentViewModel)
         {
-            if (!CanViewModelAcceptAsModel(viewModelType, typeof(IViewModel)))
+            if (!CanViewModelAcceptAsModel(viewModelType, parentViewModel.GetType()))
             {
                 argsToUse = Array.Empty<object?>();
             }
