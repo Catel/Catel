@@ -1,7 +1,7 @@
 ﻿[assembly: System.Resources.NeutralResourcesLanguage("en-US")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.MVVM")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Catel.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v11.0", FrameworkDisplayName=".NET 11.0")]
 namespace Catel
 {
     public static class Argument
@@ -320,6 +320,7 @@ namespace Catel
         NET9 = 5,
         NET10 = 6,
         NET11 = 7,
+        NET12 = 8,
     }
     public static class LanguageHelper
     {
@@ -447,6 +448,7 @@ namespace Catel
         NET9 = 3,
         NET10 = 4,
         NET11 = 5,
+        NET12 = 6,
     }
     public static class TagHelper
     {

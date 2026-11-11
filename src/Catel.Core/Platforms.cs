@@ -50,7 +50,8 @@ public static class Platforms
                        currentPlatform == SupportedPlatforms.NET8 ||
                        currentPlatform == SupportedPlatforms.NET9 ||
                        currentPlatform == SupportedPlatforms.NET10 ||
-                       currentPlatform == SupportedPlatforms.NET11;
+                       currentPlatform == SupportedPlatforms.NET11 ||
+                       currentPlatform == SupportedPlatforms.NET12; ;
 
             case KnownPlatforms.NET6:
                 return currentPlatform == SupportedPlatforms.NET6;
@@ -69,6 +70,9 @@ public static class Platforms
 
             case KnownPlatforms.NET11:
                 return currentPlatform == SupportedPlatforms.NET11;
+
+            case KnownPlatforms.NET12:
+                return currentPlatform == SupportedPlatforms.NET12;
 
             default:
                 throw new ArgumentOutOfRangeException("platformToCheck");
@@ -89,6 +93,8 @@ public static class Platforms
         return SupportedPlatforms.NET10;
 #elif NET11
         return SupportedPlatforms.NET11;
+#elif NET12
+        return SupportedPlatforms.NET12;
 #else
         throw new System.NotSupportedException("Unknown platform is not supported");
 #endif
@@ -128,7 +134,12 @@ public enum SupportedPlatforms
     /// <summary>
     /// .NET 11
     /// </summary>
-    NET11
+    NET11,
+
+    /// <summary>
+    /// .NET 12
+    /// </summary>
+    NET12
 }
 
 /// <summary>
@@ -175,4 +186,9 @@ public enum KnownPlatforms
     /// .NET 11.
     /// </summary>
     NET11,
+
+    /// <summary>
+    /// .NET 12.
+    /// </summary>
+    NET12,
 }
