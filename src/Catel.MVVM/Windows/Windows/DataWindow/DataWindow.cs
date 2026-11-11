@@ -238,7 +238,9 @@ public class DataWindow : System.Windows.Window, IDataWindow
     /// Gets the commands that are currently available on the data window.
     /// </summary>
     /// <value>The commands.</value>
+#pragma warning disable WFO2000
     protected ReadOnlyCollection<ICommand> Commands { get { return new ReadOnlyCollection<ICommand>(_commands); } }
+#pragma warning restore WFO2000
 
     /// <summary>
     /// Gets the default button.
