@@ -64,7 +64,7 @@ jobs:
         run: |
           dotnet tool restore
 
-          $gitVersion = dotnet tool run dotnet-gitversion /output json | ConvertFrom-Json
+          $gitVersion = dotnet tool run dotnet-gitversion --output json | ConvertFrom-Json
 
           $gitVersion | ConvertTo-Json -Depth 10 | Write-Output
 
