@@ -24,22 +24,7 @@ jobs:
     env:
       Category: 'Public'
       NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
-      AzureCodeSignCertificateName: ''
-      AzureCodeSignClientId: ''
-      AzureCodeSignClientSecret: ''
-      AzureCodeSignTenantId: ''
-      AzureCodeSignVaultName: ''
       Deploy: ${{ inputs.Deploy }}
-      NuGetPackageSources: ''
-      NuGetPackageSourcesNames: ''
-      NuGetPackageSourcesTokens: ''
-      NuGetPackageSourcesUsernames: ''
-      NuGetRepositoryUrl: ''
-      NuGetRepositoryApiKey: ''
-      NuGetUser: ''
-      SonarOrganization: ''
-      SonarUrl: ''
-      SonarToken: ''
   
     steps:
       - name: Enable Git long paths (global)
